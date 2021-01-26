@@ -10,6 +10,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using PizzaShopApplication.Models.Data.Context;
+using PizzaShopApplication.Models.Data.Domain;
 
 namespace PizzaShopApplication
 {
@@ -25,6 +26,7 @@ namespace PizzaShopApplication
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddTransient<PizzaRepository>();
             string connection = Configuration.GetConnectionString("DefaultConnection");
             services.AddDbContext<ApplicationDataContext>(options => options.UseSqlServer(connection));
             services.AddMvc(options =>

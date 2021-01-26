@@ -3,25 +3,28 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using PizzaShopApplication.Models;
 using PizzaShopApplication.Models.Data;
 using PizzaShopApplication.Models.Data.Context;
+using PizzaShopApplication.Models.Data.Domain;
 
 namespace PizzaShopApplication.Controllers
 {
     [Route("/")]
     public class HomeController : Controller
     {
-        ApplicationDataContext Context { get; }
-        public HomeController(ApplicationDataContext context)
+        private readonly PizzaRepository pizzaRepository;
+
+        public HomeController(PizzaRepository pizzaRepository)
         {
-            Context = context;
+            this.pizzaRepository = pizzaRepository;
         }
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            var pizzas = Context.Pizzas.ToList();
+            var pizzas = await pizzaRepository.GetPizzasAsync();
             return View(pizzas);
         }
     }

@@ -11,6 +11,7 @@ namespace PizzaShopApplication.Models.Data.Context
         public DbSet<Pizza> Pizzas { get; set; }
         public DbSet<Ingredient> Ingredients { get; set; }
         public DbSet<Recept> Recepts { get; set; }
+        public DbSet<Order> Orders { get; set; }
         public ApplicationDataContext(DbContextOptions<ApplicationDataContext> options) : base(options)
         {
             Database.EnsureCreated();

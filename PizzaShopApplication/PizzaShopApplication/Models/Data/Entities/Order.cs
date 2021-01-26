@@ -13,14 +13,22 @@ namespace PizzaShopApplication.Models.Data
         [Key]
         public int Id { get; set; }
         // Имя заказчика.
+        [Required]
+        [MaxLength(30)]
         public int Name { get; set; }
         // Номер телефона заказчика.
+        [Required]
         public int Phone { get; set; }
         // Почта заказчика.
+        [Required]
+        [MaxLength(30)]
         public string Email { get; set; }
         // Улица, указанная заказчиком.
+        [Required]
+        [MaxLength(30)]
         public string Street { get; set; }
         // Номер дома, указанный заказчиком.
+        [Required]
         public string Home { get; set; }
         // Квартира, указанная заказчиком
         public int Apartment { get; set; }
