@@ -6,32 +6,23 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using PizzaShopApplication.Models;
+using PizzaShopApplication.Models.Data;
+using PizzaShopApplication.Models.Data.Context;
 
 namespace PizzaShopApplication.Controllers
 {
+    [Route("/")]
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;
-
-        public HomeController(ILogger<HomeController> logger)
+        ApplicationDataContext Context { get; }
+        public HomeController(ApplicationDataContext context)
         {
-            _logger = logger;
+            Context = context;
         }
-
         public IActionResult Index()
         {
-            return View();
-        }
-
-        public IActionResult Privacy()
-        {
-            return View();
-        }
-
-        [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        public IActionResult Error()
-        {
-            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+            var pizzas = Context.Pizzas.ToList();
+            return View(pizzas);
         }
     }
 }
