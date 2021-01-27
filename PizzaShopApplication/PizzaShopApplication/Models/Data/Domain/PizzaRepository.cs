@@ -10,15 +10,15 @@ namespace PizzaShopApplication.Models.Data.Domain
 {
     public class PizzaRepository
     {
-        private readonly ApplicationDataContext context;
-        public PizzaRepository(ApplicationDataContext context)
+        private readonly ApplicationDataContext dbContext;
+        public PizzaRepository(ApplicationDataContext dbContext)
         {
-            this.context = context;
+            this.dbContext = dbContext;
         }
         // Получает список всех видов пицц, доступных в базе данных.
         public async Task<IEnumerable<Pizza>> GetPizzasAsync()
         {
-            var result = await context.Pizzas.ToListAsync();
+            var result = await dbContext.Pizzas.ToListAsync();
             return result;
         }
     }
