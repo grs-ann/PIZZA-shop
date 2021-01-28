@@ -11,21 +11,22 @@ namespace PizzaShopApplication.Models.Data.Domain
 {
     public class ShoppingCartRepository
     {
-        HttpContext httpContext;
-        public ShoppingCartRepository(ApplicationDataContext dbContext, HttpContext httpContext)
-        {
-            this.dbContext = dbContext;
-            this.httpContext = httpContext;
-        }
         // Контекст БД.
         private ApplicationDataContext dbContext;
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        public ShoppingCartRepository(ApplicationDataContext dbContext, IHttpContextAccessor _httpContextAccessor)
+        {
+            this.dbContext = dbContext;
+            this._httpContextAccessor = _httpContextAccessor;
+        }
+        
         public string ShoppingCartId { get; set; }
         // Ключ к сессии
         public const string CartSessionKey = "CartId";
         public void AddToCart(int id)
         {
             // Получение продукта из базы данных
-            ShoppingCartId = GetCartId();
+            ShoppingCartId = GetCartId(_httpContextAccessor.HttpContext);
             //
             var cartItem = dbContext.ShoppingCartItems.SingleOrDefault(
                 c => c.UserId == ShoppingCartId && c.ProductId == id);
@@ -42,6 +43,7 @@ namespace PizzaShopApplication.Models.Data.Domain
                     Quantity = 1,
                     DateCreated = DateTime.Now
                 };
+                dbContext.ShoppingCartItems.Add(cartItem);
             }
             // В случае, если товар(в данном случае пицца)
             // уже есть в корзине, то увеличиваем количество 
@@ -61,20 +63,20 @@ namespace PizzaShopApplication.Models.Data.Domain
             }
         }
         // Получение ключа из сессии пользователя.
-        public string GetCartId()
+        public string GetCartId(HttpContext context)
         {
-            if (!httpContext.Session.Keys.Contains(CartSessionKey))
+            if (!context.Session.Keys.Contains(CartSessionKey))
             {
                 // Генерация нового гуида.
                 Guid tempCartId = Guid.NewGuid();
-                httpContext.Session.SetString(CartSessionKey, tempCartId.ToString());
+                context.Session.SetString(CartSessionKey, tempCartId.ToString());
             }
-            return httpContext.Session.Get(CartSessionKey).ToString();
+            return context.Session.Get(CartSessionKey).ToString();
         }
         // Получает список товаров в корзине пользователя.
         public List<Cart> GetCartItems()
         {
-            ShoppingCartId = GetCartId();
+            ShoppingCartId = GetCartId(_httpContextAccessor.HttpContext);
             return dbContext.ShoppingCartItems.Where(c => c.UserId == ShoppingCartId).ToList();
         }
     }
