@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PizzaShopApplication.Models.Data;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -11,11 +12,12 @@ namespace PizzaShopApplication.Models.Entities
     {
         [Key]
         public string ItemId { get; set; }
-        // Указывает Id пользователя, связанного с приобретаемым элементом.
+        // Id пользователя, связанного с приобретаемым элементом.
         // Будет храниться как переменная сеанса.
-        public string CartId { get; set; }
+        public string UserId { get; set; }
         public int Quantity { get; set; }
         public DateTime DateCreated { get; set; }
         public int ProductId { get; set; }
+        public virtual Pizza Pizza{ get; set; }
     }
 }
