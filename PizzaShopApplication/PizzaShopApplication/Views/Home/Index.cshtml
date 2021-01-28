@@ -8,8 +8,11 @@
     <h1 align="left">ПИЦЦА</h1>
     <h3 align="left">Горячая и вкусная пицца в ваш дом!</h3>
     <h5 align="left">Сделано с любовью!</h5>
-    @foreach (var item in Model)
-    {
-        <p align ="center">@item.Name</p>
-    }
+    <form method="post" action="~/Home/AddItemToCart">
+        @foreach (var item in Model)
+        {
+            <p align="center">@item.Name</p>
+            <input type="submit" value="Добавить в корзину" />
+        }
+    </form>
 </div>

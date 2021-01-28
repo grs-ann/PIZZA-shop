@@ -17,7 +17,6 @@ namespace PizzaShopApplication.Controllers
     public class HomeController : Controller
     {
         private readonly PizzaRepository pizzaRepository;
-
         public HomeController(PizzaRepository pizzaRepository)
         {
             this.pizzaRepository = pizzaRepository;
@@ -29,4 +28,3 @@ namespace PizzaShopApplication.Controllers
         }
     }
 }
-tory classes
