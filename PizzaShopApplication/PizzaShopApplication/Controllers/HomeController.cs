@@ -13,7 +13,7 @@ using PizzaShopApplication.Models.Data.Domain;
 
 namespace PizzaShopApplication.Controllers
 {
-    [Route("/")]
+    
     public class HomeController : Controller
     {
         private readonly PizzaRepository pizzaRepository;
@@ -21,6 +21,8 @@ namespace PizzaShopApplication.Controllers
         {
             this.pizzaRepository = pizzaRepository;
         }
+        [HttpGet]
+        [Route("/")]
         public async Task<IActionResult> Index()
         {
             var pizzas = await pizzaRepository.GetPizzasAsync();

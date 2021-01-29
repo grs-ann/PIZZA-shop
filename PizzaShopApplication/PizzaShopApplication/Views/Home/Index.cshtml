@@ -1,18 +1,28 @@
 ﻿@using PizzaShopApplication.Models.Data;
 @model List<Pizza>
 @{
-    ViewData["Title"] = "Доставка пиццы в Самаре бесплатно.\nПиццерия КАРАСИК";
+    ViewData["Title"] = "Доставка пиццы в Самаре бесплатно. Пиццерия КАРАСИК";
 }
 
 <div>
     <h1 align="left">ПИЦЦА</h1>
     <h3 align="left">Горячая и вкусная пицца в ваш дом!</h3>
     <h5 align="left">Сделано с любовью!</h5>
-    <form method="post" action="~/Home/AddItemToCart">
-        @foreach (var item in Model)
+    <table>
+        @foreach (Pizza item in Model)
         {
-            <p align="center">@item.Name</p>
-            <input type="submit" value="Добавить в корзину" />
+            <tr>
+                <td>
+                    <p>Title: @item.Name</p>
+                    <p>Price: @item.Price</p>
+                </td>
+                <td>
+                    <form method="post" action="/Cart/AddItemToCart">
+                        <input hidden type="number" name="itemId" value="@item.Id"/>
+                        <input type="submit" class="btn btn-default" value="Add to the cart"/>
+                    </form>
+                </td>
+            </tr>
         }
-    </form>
+    </table>
 </div>
