@@ -22,7 +22,7 @@ namespace PizzaShopApplication.Models.Data.Domain
         
         public string ShoppingCartId { get; set; }
         // Ключ к сессии
-        public const string CartSessionKey = "CartId";
+        public const string CookieKey = "CartId";
         public void AddToCart(int id)
         {
             // Получение продукта из базы данных
@@ -62,16 +62,19 @@ namespace PizzaShopApplication.Models.Data.Domain
                 dbContext = null;
             }
         }
-        // Получение ключа из сессии пользователя.
+        // Получение ключа из кук пользователя.
         public string GetCartId(HttpContext context)
         {
-            if (!context.Session.Keys.Contains(CartSessionKey))
+            // В случае, если в куках бразуера пользователя еще не 
+            // хранится уникальное значение корзины.
+            if (!context.Request.Cookies.Keys.Contains(CookieKey))
             {
                 // Генерация нового гуида.
                 Guid tempCartId = Guid.NewGuid();
-                context.Session.SetString(CartSessionKey, tempCartId.ToString());
+                context.Response.Cookies.Append(CookieKey, tempCartId.ToString());
             }
-            return context.Session.Get(CartSessionKey).ToString();
+            var gg = context.Request.Cookies[CookieKey];
+            return gg;
         }
         // Получает список товаров в корзине пользователя.
         public List<Cart> GetCartItems()
