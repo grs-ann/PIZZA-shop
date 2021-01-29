@@ -56,7 +56,12 @@ namespace PizzaShopApplication
             app.UseSession();
             // “.к. будет использоватьс€ модель машрутизации на основе атрибутов,
             // то не определ€ем никаких других маршрутов.
-            app.UseMvc();
+            app.UseMvc(routes =>
+            {
+                routes.MapRoute(
+                    name: "default",
+                    template: "{controller=Home}/{action=Index}/{id?}");
+            });
             app.UseAuthorization();
             
         }

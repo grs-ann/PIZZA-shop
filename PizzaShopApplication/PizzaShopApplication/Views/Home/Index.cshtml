@@ -19,6 +19,7 @@
                 <td>
                     <form method="post" action="/Cart/AddItemToCart">
                         <input hidden type="number" name="itemId" value="@item.Id"/>
+                        <input hidden type="text" name="itemName" value="@item.Name"/>
                         <input type="submit" class="btn btn-default" value="Add to the cart"/>
                     </form>
                 </td>
