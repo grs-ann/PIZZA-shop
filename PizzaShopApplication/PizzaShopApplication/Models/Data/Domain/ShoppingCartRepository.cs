@@ -21,12 +21,12 @@ namespace PizzaShopApplication.Models.Data.Domain
         }
         
         public string ShoppingCartId { get; set; }
-        // Ключ к сессии
+        // Ключ для кук.
         public const string CookieKey = "CartId";
         public void AddToCart(int id)
         {
             // Получение продукта из базы данных
-            ShoppingCartId = GetCartId(_httpContextAccessor.HttpContext);
+            ShoppingCartId = GetCartId();
             //
             var cartItem = dbContext.ShoppingCartItems.SingleOrDefault(
                 c => c.UserId == ShoppingCartId && c.ProductId == id);
@@ -63,23 +63,28 @@ namespace PizzaShopApplication.Models.Data.Domain
             }
         }
         // Получение ключа из кук пользователя.
-        public string GetCartId(HttpContext context)
+        public string GetCartId()
         {
             // В случае, если в куках бразуера пользователя еще не 
             // хранится уникальное значение корзины.
-            if (!context.Request.Cookies.Keys.Contains(CookieKey))
+            if (!_httpContextAccessor.HttpContext.Request.Cookies.Keys.Contains(CookieKey))
             {
                 // Генерация нового гуида.
                 Guid tempCartId = Guid.NewGuid();
-                context.Response.Cookies.Append(CookieKey, tempCartId.ToString());
+                _httpContextAccessor.HttpContext.Response.Cookies.Append(CookieKey, tempCartId.ToString());
+                // При первом обращении от пользователя обьект HttpContext
+                // еще не обновлен, соответственно кука будет нулевая.
+                // Поэтому возвращаем только что сгенерированный гуид.
+                return tempCartId.ToString();
             }
-            var gg = context.Request.Cookies[CookieKey];
-            return gg;
+            string tempValue;
+            _httpContextAccessor.HttpContext.Request.Cookies.TryGetValue(CookieKey, out tempValue);
+            return tempValue;
         }
         // Получает список товаров в корзине пользователя.
         public List<Cart> GetCartItems()
         {
-            ShoppingCartId = GetCartId(_httpContextAccessor.HttpContext);
+            ShoppingCartId = GetCartId();
             return dbContext.ShoppingCartItems.Where(c => c.UserId == ShoppingCartId).ToList();
         }
     }
