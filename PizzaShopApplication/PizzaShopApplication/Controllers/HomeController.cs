@@ -13,7 +13,6 @@ using PizzaShopApplication.Models.Data.Domain;
 
 namespace PizzaShopApplication.Controllers
 {
-    [Route("/")]
     public class HomeController : Controller
     {
         private readonly PizzaRepository pizzaRepository;
