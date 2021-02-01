@@ -1,0 +1,21 @@
+﻿@using PizzaShopApplication.Models.Entities;
+@model List<Cart>
+@{
+    ViewData["Title"] = "Корзина";
+}
+
+<table>
+    <tr>
+        <th>Название товара</th>
+        <th>Количество</th>
+        <th>Цена</th>
+    </tr>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>@item.Pizza.Name</td>
+            <td>@item.Quantity</td>
+            <td>@item.Pizza.Price</td>
+        </tr>
+    }
+</table>

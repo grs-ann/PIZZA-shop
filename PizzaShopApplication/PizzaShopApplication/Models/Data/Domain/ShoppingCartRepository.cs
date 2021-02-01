@@ -54,6 +54,18 @@ namespace PizzaShopApplication.Models.Data.Domain
             }
             dbContext.SaveChanges();
         }
+        public void DeleteFromCart(int id)
+        {
+            // Получение продукта из базы данных
+            ShoppingCartId = GetCartId();
+            //
+            var cartItem = dbContext.ShoppingCartItems.SingleOrDefault(
+                c => c.UserId == ShoppingCartId && c.ProductId == id);
+            if (cartItem.Quantity > 0)
+            {
+                cartItem.Quantity--;
+            }
+        }
         public void Dispose()
         {
             if (dbContext != null)
@@ -84,8 +96,20 @@ namespace PizzaShopApplication.Models.Data.Domain
         // Получает список товаров в корзине пользователя.
         public List<Cart> GetCartItems()
         {
+            /*ShoppingCartId = GetCartId();
+            var cartItemsTemp = dbContext.ShoppingCartItems.Where(c => c.UserId == ShoppingCartId).Select(c => c.ProductId);
+            // !!! С целью включения в работу оптимизатора, 
+            // приводим к списку не сразу. Это связано с линками из под entity framework,
+            // потому что устанавливается коннект к бд(уточню позже).
+            var cartItems = cartItemsTemp.ToList();
+            var pizzasTemp = dbContext.Pizzas.Where(p => cartItems.Contains(p.Id));
+            var pizzas = pizzasTemp.ToList();
+            return pizzas;*/
             ShoppingCartId = GetCartId();
-            return dbContext.ShoppingCartItems.Where(c => c.UserId == ShoppingCartId).ToList();
+            var cartItemsTemp = dbContext.ShoppingCartItems.Where(c => c.UserId == ShoppingCartId);
+            var cartItems = cartItemsTemp.ToList();
+            return cartItems;
         }
+        
     }
 }

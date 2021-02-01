@@ -17,6 +17,7 @@ namespace PizzaShopApplication.Models.Entities
         public string UserId { get; set; }
         public int Quantity { get; set; }
         public DateTime DateCreated { get; set; }
+        // Идентификатор продукта, находящегося в корзине.
         public int ProductId { get; set; }
         public virtual Pizza Pizza{ get; set; }
     }

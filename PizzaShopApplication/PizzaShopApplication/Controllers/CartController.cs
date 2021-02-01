@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using PizzaShopApplication.Models.Data.Domain;
+using PizzaShopApplication.Models.Data;
 
 namespace PizzaShopApplication.Controllers
 {
@@ -24,7 +25,8 @@ namespace PizzaShopApplication.Controllers
         //[Route("Cart/GetUserCartInfo")]
         public IActionResult GetUserCartInfo()
         {
-            return Content("Это пользовательская корзина");
+            var cartItems = cart.GetCartItems();
+            return View(cartItems);
         }
     }
 }

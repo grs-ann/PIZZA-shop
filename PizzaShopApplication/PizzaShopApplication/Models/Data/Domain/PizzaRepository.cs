@@ -21,5 +21,9 @@ namespace PizzaShopApplication.Models.Data.Domain
             var result = await dbContext.Pizzas.ToListAsync();
             return result;
         }
+        /*public async Task<IEnumerable<Pizza>> GetPizzasById()
+        {
+            var result = await dbContext.Pizzas.Where(x => x.Id == )
+        }*/
     }
 } 
