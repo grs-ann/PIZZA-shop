@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using PizzaShopApplication.Models.Data.Context;
 using PizzaShopApplication.Models.Entities;
+using PizzaShopApplication.Models.Secondary.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,29 +15,30 @@ namespace PizzaShopApplication.Models.Data.Domain
         // Контекст БД.
         private ApplicationDataContext dbContext;
         private readonly IHttpContextAccessor _httpContextAccessor;
-        public ShoppingCartRepository(ApplicationDataContext dbContext, IHttpContextAccessor _httpContextAccessor)
+        private UserCartInformer userCartInformer;
+        public ShoppingCartRepository(ApplicationDataContext dbContext,
+            IHttpContextAccessor _httpContextAccessor, UserCartInformer userCartInformer)
         {
             this.dbContext = dbContext;
             this._httpContextAccessor = _httpContextAccessor;
+            this.userCartInformer = userCartInformer;
         }
-        
-        public string ShoppingCartId { get; set; }
         // Ключ для кук.
         public const string CookieKey = "CartId";
-        public void AddToCart(int id)
+        public void AddToCart(Guid id)
         {
             // Получение продукта из базы данных
-            ShoppingCartId = GetCartId();
+            Guid ShoppingCartId = GetCartId();
             //
             var cartItem = dbContext.ShoppingCartItems.SingleOrDefault(
-                c => c.UserId == ShoppingCartId && c.ProductId == id);
+                c => c.UserId == ShoppingCartId && c.PizzaId == id);
             // Если такого товара еще нет в корзине, то создаем новый.
             if (cartItem == null)
             {
                 cartItem = new Cart
                 {
-                    ItemId = Guid.NewGuid().ToString(),
-                    ProductId = id,
+                    ItemId = Guid.NewGuid(),
+                    PizzaId = id,
                     UserId = ShoppingCartId,
                     Pizza = dbContext.Pizzas.SingleOrDefault(
                         p => p.Id == id),
@@ -54,13 +56,13 @@ namespace PizzaShopApplication.Models.Data.Domain
             }
             dbContext.SaveChanges();
         }
-        public void DeleteFromCart(int id)
+        public void DeleteFromCart(Guid id)
         {
             // Получение продукта из базы данных
-            ShoppingCartId = GetCartId();
+            Guid ShoppingCartId = GetCartId();
             //
             var cartItem = dbContext.ShoppingCartItems.SingleOrDefault(
-                c => c.UserId == ShoppingCartId && c.ProductId == id);
+                c => c.UserId == ShoppingCartId && c.PizzaId == id);
             if (cartItem.Quantity > 0)
             {
                 cartItem.Quantity--;
@@ -75,7 +77,7 @@ namespace PizzaShopApplication.Models.Data.Domain
             }
         }
         // Получение ключа из кук пользователя.
-        public string GetCartId()
+        public Guid GetCartId()
         {
             // В случае, если в куках бразуера пользователя еще не 
             // хранится уникальное значение корзины.
@@ -87,29 +89,31 @@ namespace PizzaShopApplication.Models.Data.Domain
                 // При первом обращении от пользователя обьект HttpContext
                 // еще не обновлен, соответственно кука будет нулевая.
                 // Поэтому возвращаем только что сгенерированный гуид.
-                return tempCartId.ToString();
+                return tempCartId;
             }
-            string tempValue;
-            _httpContextAccessor.HttpContext.Request.Cookies.TryGetValue(CookieKey, out tempValue);
-            return tempValue;
+            _httpContextAccessor.HttpContext.Request.Cookies.TryGetValue(CookieKey, out string tempValue);
+            return new Guid(tempValue);
         }
         // Получает список товаров в корзине пользователя.
-        public List<Cart> GetCartItems()
+        public List<UserCartInformer> GetCartItems()
         {
-            /*ShoppingCartId = GetCartId();
-            var cartItemsTemp = dbContext.ShoppingCartItems.Where(c => c.UserId == ShoppingCartId).Select(c => c.ProductId);
-            // !!! С целью включения в работу оптимизатора, 
-            // приводим к списку не сразу. Это связано с линками из под entity framework,
-            // потому что устанавливается коннект к бд(уточню позже).
-            var cartItems = cartItemsTemp.ToList();
-            var pizzasTemp = dbContext.Pizzas.Where(p => cartItems.Contains(p.Id));
-            var pizzas = pizzasTemp.ToList();
-            return pizzas;*/
-            ShoppingCartId = GetCartId();
-            var cartItemsTemp = dbContext.ShoppingCartItems.Where(c => c.UserId == ShoppingCartId);
-            var cartItems = cartItemsTemp.ToList();
-            return cartItems;
+            var cartInformer = new List<UserCartInformer>();
+            Guid ShoppingCartId = GetCartId();
+            var userCartItems = dbContext.ShoppingCartItems.Where(u => u.UserId == ShoppingCartId);
+            var tempPizzas = dbContext.Pizzas;
+            foreach (var cartItem in userCartItems)
+            {
+                // Наполняем вспомогательный объект 
+                // информацией о выбранном товаре
+                var tempoCart = new UserCartInformer();
+                tempoCart.PizzaCount = cartItem.Quantity;
+                tempoCart.PizzaName = tempPizzas.FirstOrDefault(p => p.Id == cartItem.PizzaId).Name;
+                tempoCart.PizzaPrice = tempPizzas.FirstOrDefault(p => p.Id == cartItem.PizzaId).Price;
+                cartInformer.Add(tempoCart);
+            }
+            return cartInformer;
         }
+
         
     }
 }

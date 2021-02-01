@@ -11,6 +11,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using PizzaShopApplication.Models.Data.Context;
 using PizzaShopApplication.Models.Data.Domain;
+using PizzaShopApplication.Models.Secondary.Entities;
 
 namespace PizzaShopApplication
 {
@@ -30,6 +31,7 @@ namespace PizzaShopApplication
             services.AddHttpContextAccessor();
             services.AddTransient<PizzaRepository>();
             services.AddTransient<ShoppingCartRepository>();
+            services.AddTransient<UserCartInformer>();
             string connection = Configuration.GetConnectionString("DefaultConnection");
             services.AddDbContext<ApplicationDataContext>(options => options.UseSqlServer(connection));
             services.AddMvc(options =>

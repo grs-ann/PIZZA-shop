@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -11,10 +12,14 @@ namespace PizzaShopApplication.Models.Data
     public class Recept
     {
         [Key]
-        public int Id { get; set; }
+        public Guid Id { get; set; }
         // Ссылка на связанную модель Pizza.
-        public int PizzaId { get; set; }
+        [ForeignKey("Pizza")]
+        public Guid PizzaId { get; set; }
         // Ссылка на связанную модель Recept.
-        public int ReceptId { get; set; }
+        [ForeignKey("Ingredient")]
+        public Guid IngridientId { get; set; }
+        public virtual Pizza Pizza { get; set; }
+        public virtual Ingredient Ingredient { get; set; }
     }
 }

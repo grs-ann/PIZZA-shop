@@ -11,14 +11,15 @@ namespace PizzaShopApplication.Models.Entities
     public class Cart
     {
         [Key]
-        public string ItemId { get; set; }
+        public Guid ItemId { get; set; }
         // Id пользователя, связанного с приобретаемым элементом.
         // Будет храниться как переменная сеанса.
-        public string UserId { get; set; }
+        public Guid UserId { get; set; }
         public int Quantity { get; set; }
         public DateTime DateCreated { get; set; }
         // Идентификатор продукта, находящегося в корзине.
-        public int ProductId { get; set; }
+        [ForeignKey("Pizza")]
+        public Guid PizzaId { get; set; }
         public virtual Pizza Pizza{ get; set; }
     }
 }

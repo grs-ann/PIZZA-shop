@@ -1,5 +1,5 @@
-﻿@using PizzaShopApplication.Models.Entities;
-@model List<Cart>
+﻿@using PizzaShopApplication.Models.Secondary.Entities;
+@model List<UserCartInformer>
 @{
     ViewData["Title"] = "Корзина";
 }
@@ -8,14 +8,15 @@
     <tr>
         <th>Название товара</th>
         <th>Количество</th>
-        <th>Цена</th>
+        <th>Цена(за шт.)</th>
     </tr>
     @foreach (var item in Model)
     {
         <tr>
-            <td>@item.Pizza.Name</td>
-            <td>@item.Quantity</td>
-            <td>@item.Pizza.Price</td>
+            <td>@item.PizzaName</td>
+            <td>@item.PizzaCount</td>
+            <td>@item.PizzaPrice</td>
         </tr>
     }
 </table>
+<h3>Итоговая сумма заказа:@ViewBag.TotalSum</h3>
