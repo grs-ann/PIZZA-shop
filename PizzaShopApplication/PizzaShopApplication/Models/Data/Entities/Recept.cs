@@ -14,10 +14,10 @@ namespace PizzaShopApplication.Models.Data
         [Key]
         public Guid Id { get; set; }
         // Ссылка на связанную модель Pizza.
-        [ForeignKey("Pizza")]
+        //[ForeignKey("Pizza")]
         public Guid PizzaId { get; set; }
         // Ссылка на связанную модель Recept.
-        [ForeignKey("Ingredient")]
+        //[ForeignKey("Ingredient")]
         public Guid IngridientId { get; set; }
         public virtual Pizza Pizza { get; set; }
         public virtual Ingredient Ingredient { get; set; }

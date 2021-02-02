@@ -9,6 +9,8 @@
         <th>Название товара</th>
         <th>Количество</th>
         <th>Цена(за шт.)</th>
+        <th></th>
+        <th></th>
     </tr>
     @foreach (var item in Model)
     {
@@ -16,6 +18,18 @@
             <td>@item.PizzaName</td>
             <td>@item.PizzaCount</td>
             <td>@item.PizzaPrice</td>
+            <td>
+                <form method="post" action="/Cart/DeleteItemFromCart">
+                    <input hidden type="text" name="itemId" value="@item.PizzaId" />
+                    <input type="submit" class="btn btn-default" value="-" />
+                </form>
+            </td>
+            <td>
+                <form method="post" action="/Cart/AddItemToCartChangeEvent">
+                    <input hidden type="text" name="itemId" value="@item.PizzaId" />
+                    <input type="submit" class="btn btn-default" value="+" />
+                </form>
+            </td>
         </tr>
     }
 </table>

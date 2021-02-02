@@ -25,12 +25,11 @@ namespace PizzaShopApplication.Models.Data.Domain
         }
         // Ключ для кук.
         public const string CookieKey = "CartId";
-        public void AddToCart(Guid id)
+        public async Task AddToCartAsync(Guid id)
         {
             // Получение продукта из базы данных
             Guid ShoppingCartId = GetCartId();
-            //
-            var cartItem = dbContext.ShoppingCartItems.SingleOrDefault(
+            var cartItem = await dbContext.ShoppingCartItems.SingleOrDefaultAsync(
                 c => c.UserId == ShoppingCartId && c.PizzaId == id);
             // Если такого товара еще нет в корзине, то создаем новый.
             if (cartItem == null)
@@ -40,12 +39,12 @@ namespace PizzaShopApplication.Models.Data.Domain
                     ItemId = Guid.NewGuid(),
                     PizzaId = id,
                     UserId = ShoppingCartId,
-                    Pizza = dbContext.Pizzas.SingleOrDefault(
+                    Pizza = await dbContext.Pizzas.SingleOrDefaultAsync(
                         p => p.Id == id),
                     Quantity = 1,
                     DateCreated = DateTime.Now
                 };
-                dbContext.ShoppingCartItems.Add(cartItem);
+                await dbContext.ShoppingCartItems.AddAsync(cartItem);
             }
             // В случае, если товар(в данном случае пицца)
             // уже есть в корзине, то увеличиваем количество 
@@ -54,27 +53,27 @@ namespace PizzaShopApplication.Models.Data.Domain
             {
                 cartItem.Quantity++;
             }
-            dbContext.SaveChanges();
+            await dbContext.SaveChangesAsync();
         }
-        public void DeleteFromCart(Guid id)
+        public async Task DeleteFromCartAsync(Guid id)
         {
             // Получение продукта из базы данных
             Guid ShoppingCartId = GetCartId();
             //
-            var cartItem = dbContext.ShoppingCartItems.SingleOrDefault(
+            var cartItem = await dbContext.ShoppingCartItems.SingleOrDefaultAsync(
                 c => c.UserId == ShoppingCartId && c.PizzaId == id);
-            if (cartItem.Quantity > 0)
+            
+            if (cartItem.Quantity > 1)
             {
                 cartItem.Quantity--;
             }
-        }
-        public void Dispose()
-        {
-            if (dbContext != null)
+            // В случае, если количество товара в корзине
+            // меньше одного - удаляем запись из БД.
+            else
             {
-                dbContext.Dispose();
-                dbContext = null;
+                dbContext.Remove(cartItem);
             }
+            await dbContext.SaveChangesAsync();
         }
         // Получение ключа из кук пользователя.
         public Guid GetCartId()
@@ -95,12 +94,12 @@ namespace PizzaShopApplication.Models.Data.Domain
             return new Guid(tempValue);
         }
         // Получает список товаров в корзине пользователя.
-        public List<UserCartInformer> GetCartItems()
+        public async Task<List<UserCartInformer>> GetCartItemsAsync()
         {
             var cartInformer = new List<UserCartInformer>();
             Guid ShoppingCartId = GetCartId();
             var userCartItems = dbContext.ShoppingCartItems.Where(u => u.UserId == ShoppingCartId);
-            var tempPizzas = dbContext.Pizzas;
+            var tempPizzas = await dbContext.Pizzas.ToListAsync();
             foreach (var cartItem in userCartItems)
             {
                 // Наполняем вспомогательный объект 
@@ -109,6 +108,7 @@ namespace PizzaShopApplication.Models.Data.Domain
                 tempoCart.PizzaCount = cartItem.Quantity;
                 tempoCart.PizzaName = tempPizzas.FirstOrDefault(p => p.Id == cartItem.PizzaId).Name;
                 tempoCart.PizzaPrice = tempPizzas.FirstOrDefault(p => p.Id == cartItem.PizzaId).Price;
+                tempoCart.PizzaId = tempPizzas.FirstOrDefault(p => p.Id == cartItem.PizzaId).Id;
                 cartInformer.Add(tempoCart);
             }
             return cartInformer;
