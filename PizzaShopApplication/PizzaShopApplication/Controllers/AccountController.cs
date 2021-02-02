@@ -10,15 +10,18 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using System.Security.Claims;
+using PizzaShopApplication.Models.Secondary;
 
 namespace PizzaShopApplication.Controllers
 {
     public class AccountController : Controller
     {
         private ApplicationDataContext dbContext;
-        public AccountController(ApplicationDataContext dbContext)
+        private IPasswordHasher hasher;
+        public AccountController(ApplicationDataContext dbContext, IPasswordHasher hasher)
         {
             this.dbContext = dbContext;
+            this.hasher = hasher;
         }
         [HttpGet]
         public IActionResult Login()
@@ -29,14 +32,17 @@ namespace PizzaShopApplication.Controllers
         {
             if (ModelState.IsValid)
             {
-                User user = await dbContext.Users.FirstOrDefaultAsync(u => u.Email == model.Email && u.Password == model.Password);
+                User user = await dbContext.Users.FirstOrDefaultAsync(u => u.Email == model.Email);
+                if (!hasher.IsPasswordMathcingHash(model.Password, user.Password))
+                {
+                    ModelState.AddModelError("", "Некорректный логин и(или) пароль");
+                }
                 if (user != null)
                 {
                     // Аутентификация.
                     await Authenticate(model.Email);
                     return RedirectToAction("Index", "Home");
                 }
-                ModelState.AddModelError("", "Некорректный логин и(или) пароль");
             }
             return View(model);
         }
@@ -52,7 +58,8 @@ namespace PizzaShopApplication.Controllers
                 User user = await dbContext.Users.FirstOrDefaultAsync(u => u.Email == model.Email);
                 if (user == null)
                 {
-                    await dbContext.Users.AddAsync(new User { Email = model.Email, Password = model.Password });
+                    var hashPassword = hasher.GenerateHash(model.Password);
+                    await dbContext.Users.AddAsync(new User { Email = model.Email, Password = hashPassword });
                     // Аутентификация.
                     await Authenticate(model.Email);
                     await dbContext.SaveChangesAsync();

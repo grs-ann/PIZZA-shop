@@ -12,6 +12,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using PizzaShopApplication.Models.Data.Context;
 using PizzaShopApplication.Models.Data.Domain;
+using PizzaShopApplication.Models.Secondary;
 using PizzaShopApplication.Models.Secondary.Entities;
 
 namespace PizzaShopApplication
@@ -33,6 +34,7 @@ namespace PizzaShopApplication
             services.AddTransient<PizzaRepository>();
             services.AddTransient<ShoppingCartRepository>();
             services.AddTransient<UserCartInformer>();
+            services.AddSingleton<IPasswordHasher, PasswordHasher>();
             string connection = Configuration.GetConnectionString("DefaultConnection");
             services.AddDbContext<ApplicationDataContext>(options => options.UseSqlServer(connection));
             // Установка конфигурации подключения.
