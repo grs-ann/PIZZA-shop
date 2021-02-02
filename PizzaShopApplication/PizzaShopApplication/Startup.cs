@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -34,6 +35,12 @@ namespace PizzaShopApplication
             services.AddTransient<UserCartInformer>();
             string connection = Configuration.GetConnectionString("DefaultConnection");
             services.AddDbContext<ApplicationDataContext>(options => options.UseSqlServer(connection));
+            // ”становка конфигурации подключени€.
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                .AddCookie(options =>
+                {
+                    options.LoginPath = new Microsoft.AspNetCore.Http.PathString("/Account/Login");
+                });
             services.AddMvc(options =>
             {
                 options.EnableEndpointRouting = false;
@@ -56,6 +63,11 @@ namespace PizzaShopApplication
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseSession();
+            // ѕосредством аутентификации мы идентифицируем пользовател€, узнаем, кто он.
+            app.UseAuthentication();
+            // авторизаци€ отвечает на вопрос, какие права в системе имеет пользователь, 
+            // позвол€ет разграничить доступ к ресурсам приложени€.
+            app.UseAuthorization();
             // “.к. будет использоватьс€ модель машрутизации на основе атрибутов,
             // то не определ€ем никаких других маршрутов.
             app.UseMvc(routes =>
