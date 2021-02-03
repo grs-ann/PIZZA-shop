@@ -59,7 +59,6 @@ namespace PizzaShopApplication
             else
             {
                 app.UseExceptionHandler("/Home/Error");
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
             app.UseHttpsRedirection();
@@ -67,7 +66,7 @@ namespace PizzaShopApplication
             app.UseSession();
             // Посредством аутентификации мы идентифицируем пользователя, узнаем, кто он.
             app.UseAuthentication();
-            // авторизация отвечает на вопрос, какие права в системе имеет пользователь, 
+            // Авторизация отвечает на вопрос, какие права в системе имеет пользователь, 
             // позволяет разграничить доступ к ресурсам приложения.
             app.UseAuthorization();
             // Т.к. будет использоваться модель машрутизации на основе атрибутов,

@@ -42,8 +42,12 @@ namespace PizzaShopApplication.Models.Secondary
             byte[] hash = pbkdf2.GetBytes(20);
             /* Compare the results */
             for (int i = 0; i < 20; i++)
-                if (hashBytes[i + 16] != hash[i])
+            {
+                if (hashBytes[i+16] != hash[i])
+                {
                     return false;
+                }
+            }
             return true;
         }
     }

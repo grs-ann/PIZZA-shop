@@ -28,6 +28,8 @@ namespace PizzaShopApplication.Controllers
         {
             return View();
         }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(LoginModel model)
         {
             if (ModelState.IsValid)
@@ -35,13 +37,16 @@ namespace PizzaShopApplication.Controllers
                 User user = await dbContext.Users.FirstOrDefaultAsync(u => u.Email == model.Email);
                 if (!hasher.IsPasswordMathcingHash(model.Password, user.Password))
                 {
-                    ModelState.AddModelError("", "Некорректный логин и(или) пароль");
+                    ModelState.AddModelError("", "Некорректные логин и(или) пароль");
                 }
-                if (user != null)
+                else
                 {
-                    // Аутентификация.
-                    await Authenticate(model.Email);
-                    return RedirectToAction("Index", "Home");
+                    if (user != null)
+                    {
+                        // Аутентификация.
+                        await Authenticate(model.Email);
+                        return RedirectToAction("Index", "Home");
+                    }
                 }
             }
             return View(model);

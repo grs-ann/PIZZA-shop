@@ -23,7 +23,6 @@ namespace PizzaShopApplication.Controllers
         }
         [HttpGet]
         [Route("/")]
-        [Authorize]
         public async Task<IActionResult> Index()
         {
             var pizzas = await pizzaRepository.GetPizzasAsync();
