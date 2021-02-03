@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using System.Security.Claims;
 using PizzaShopApplication.Models.Secondary;
+using PizzaShopApplication.Models.Data.Entities.Authentification;
 
 namespace PizzaShopApplication.Controllers
 {
@@ -34,7 +35,7 @@ namespace PizzaShopApplication.Controllers
         {
             if (ModelState.IsValid)
             {
-                User user = await dbContext.Users.FirstOrDefaultAsync(u => u.Email == model.Email);
+                User user = await dbContext.Users.Include(u => u.Role).FirstOrDefaultAsync(u => u.Email == model.Email);
                 if (!hasher.IsPasswordMathcingHash(model.Password, user.Password))
                 {
                     ModelState.AddModelError("", "Некорректные логин и(или) пароль");
@@ -44,7 +45,7 @@ namespace PizzaShopApplication.Controllers
                     if (user != null)
                     {
                         // Аутентификация.
-                        await Authenticate(model.Email);
+                        await Authenticate(user);
                         return RedirectToAction("Index", "Home");
                     }
                 }
@@ -64,11 +65,15 @@ namespace PizzaShopApplication.Controllers
                 if (user == null)
                 {
                     var hashPassword = hasher.GenerateHash(model.Password);
-                    await dbContext.Users.AddAsync(new User { Email = model.Email, Password = hashPassword });
-                    // Аутентификация.
-                    await Authenticate(model.Email);
-                    await dbContext.SaveChangesAsync();
-                    return RedirectToAction("Index", "Home");
+                    Role userRole = await dbContext.Roles.FirstOrDefaultAsync(r => r.Name == "user");
+                    if (userRole != null)
+                    {
+                        await dbContext.Users.AddAsync(new User { Email = model.Email, Password = hashPassword, Role = userRole });
+                        // Аутентификация.
+                        await Authenticate(user);
+                        await dbContext.SaveChangesAsync();
+                        return RedirectToAction("Index", "Home");
+                    }
                 }
                 else
                 {
@@ -82,11 +87,12 @@ namespace PizzaShopApplication.Controllers
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             return RedirectToAction("Login", "Account");
         }
-        private async Task Authenticate(string userName)
+        private async Task Authenticate(User user)
         {
             var claims = new List<Claim>
             {
-                new Claim(ClaimsIdentity.DefaultNameClaimType, userName)
+                new Claim(ClaimsIdentity.DefaultNameClaimType, user.Email),
+                new Claim(ClaimsIdentity.DefaultRoleClaimType, user.Role?.Name)
             };
             // Cоздаем объект ClaimsIdentity.
             ClaimsIdentity id = new ClaimsIdentity(claims, "ApplicationCookie", ClaimsIdentity.DefaultNameClaimType, ClaimsIdentity.DefaultRoleClaimType);
