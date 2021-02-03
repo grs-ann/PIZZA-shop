@@ -3,12 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using PizzaShopApplication.Models.Data.Entities;
+using PizzaShopApplication.Models.Data.Entities.Authentification;
 using PizzaShopApplication.Models.Entities;
 
 namespace PizzaShopApplication.Models.Data.Context
 {
     public class ApplicationDataContext : DbContext
     {
+        public DbSet<User> Users { get; set; }
+        public DbSet<Role> Roles { get; set; }
         public DbSet<Pizza> Pizzas { get; set; }
         public DbSet<Ingredient> Ingredients { get; set; }
         public DbSet<Recept> Recepts { get; set; }

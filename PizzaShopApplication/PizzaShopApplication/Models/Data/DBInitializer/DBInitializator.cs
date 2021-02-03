@@ -1,4 +1,6 @@
 ﻿using PizzaShopApplication.Models.Data.Context;
+using PizzaShopApplication.Models.Data.Entities;
+using PizzaShopApplication.Models.Data.Entities.Authentification;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -155,6 +157,19 @@ namespace PizzaShopApplication.Models.Data.DBInitializer
                     });
             }
             context.SaveChanges();
+        }
+        public private void CreateARoles(ApplicationDataContext context)
+        {
+            string adminRoleName = "admin";
+            string userRoleName = "user";
+            string adminEmail = "admin@gmail.ru";
+            string adminPassword = "5juseuebok5";
+
+            // Добавление ролей.
+            context.Roles.Add(new Role { Id = 1, Name = adminRoleName });
+            context.Roles.Add(new Role { Id = 2, Name = userRoleName });
+            context.Users.Add(new User { Id = Guid.NewGuid(), Email = adminEmail, Password = adminPassword });
+
         }
     }
 }
