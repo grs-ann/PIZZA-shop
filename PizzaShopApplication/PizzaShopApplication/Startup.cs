@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -12,7 +11,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using PizzaShopApplication.Models.Data.Context;
 using PizzaShopApplication.Models.Data.Domain;
-using PizzaShopApplication.Models.Secondary;
 using PizzaShopApplication.Models.Secondary.Entities;
 
 namespace PizzaShopApplication
@@ -34,15 +32,8 @@ namespace PizzaShopApplication
             services.AddTransient<PizzaRepository>();
             services.AddTransient<ShoppingCartRepository>();
             services.AddTransient<UserCartInformer>();
-            services.AddSingleton<IPasswordHasher, PasswordHasher>();
             string connection = Configuration.GetConnectionString("DefaultConnection");
             services.AddDbContext<ApplicationDataContext>(options => options.UseSqlServer(connection));
-            // Установка конфигурации подключения.
-            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
-                .AddCookie(options =>
-                {
-                    options.LoginPath = new Microsoft.AspNetCore.Http.PathString("/Account/Login");
-                });
             services.AddMvc(options =>
             {
                 options.EnableEndpointRouting = false;
@@ -59,16 +50,12 @@ namespace PizzaShopApplication
             else
             {
                 app.UseExceptionHandler("/Home/Error");
+                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseSession();
-            // Посредством аутентификации мы идентифицируем пользователя, узнаем, кто он.
-            app.UseAuthentication();
-            // Авторизация отвечает на вопрос, какие права в системе имеет пользователь, 
-            // позволяет разграничить доступ к ресурсам приложения.
-            app.UseAuthorization();
             // Т.к. будет использоваться модель машрутизации на основе атрибутов,
             // то не определяем никаких других маршрутов.
             app.UseMvc(routes =>

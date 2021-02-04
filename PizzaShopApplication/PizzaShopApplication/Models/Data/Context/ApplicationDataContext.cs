@@ -4,8 +4,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using PizzaShopApplication.Models.Data.Entities;
-using PizzaShopApplication.Models.Data.Entities.Authentification;
 using PizzaShopApplication.Models.Entities;
 using PizzaShopApplication.Models.Secondary;
 
@@ -13,9 +11,12 @@ namespace PizzaShopApplication.Models.Data.Context
 {
     public class ApplicationDataContext : DbContext
     {
+<<<<<<< HEAD
         IPasswordHasher ph;
         public DbSet<User> Users { get; set; }
         public DbSet<Role> Roles { get; set; }
+=======
+>>>>>>> parent of 8503132... Merge pull request #7 from grs-ann/AuthentificationSystem
         public DbSet<Pizza> Pizzas { get; set; }
         public DbSet<Ingredient> Ingredients { get; set; }
         public DbSet<Recept> Recepts { get; set; }
