@@ -93,5 +93,6 @@ namespace PizzaShopApplication.Controllers
             // Установка аутентификационных кук.
             await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(id));
         }
+        // backup=true
     }
 }
