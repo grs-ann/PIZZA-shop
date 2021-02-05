@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -23,6 +22,7 @@ namespace PizzaShopApplication.Controllers
         }
         [HttpGet]
         [Route("/")]
+        [Authorize(Roles ="admin")]
         public async Task<IActionResult> Index()
         {
             var pizzas = await pizzaRepository.GetPizzasAsync();
