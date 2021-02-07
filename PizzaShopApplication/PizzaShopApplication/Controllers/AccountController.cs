@@ -16,6 +16,7 @@ namespace PizzaShopApplication.Controllers
 {
     public class AccountController : Controller
     {
+        string test;
         private ApplicationDataContext dbContext;
         private IPasswordHasher hasher;
         public AccountController(ApplicationDataContext dbContext, IPasswordHasher hasher)
