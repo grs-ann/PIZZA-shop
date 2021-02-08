@@ -11,7 +11,7 @@ namespace PizzaShopApplication.Models.Data
     public class Pizza
     {
         [Key]
-        public Guid Id { get; set; }
+        public int Id { get; set; }
         // Название пиццы.
         public string Name { get; set; }
         // Диаметр пиццы в сантиметрах.

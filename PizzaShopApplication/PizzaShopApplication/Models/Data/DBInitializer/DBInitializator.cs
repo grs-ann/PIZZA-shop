@@ -13,18 +13,6 @@ namespace PizzaShopApplication.Models.Data.DBInitializer
         // При пустой БД заполняет таблицы тестовыми начальными данными.
         public static void Initialize(ApplicationDataContext context)
         {
-            var pizza1 = Guid.NewGuid();
-            var pizza2 = Guid.NewGuid();
-            var ingredient2 = Guid.NewGuid();
-            var ingredient3 = Guid.NewGuid();
-            var ingredient4 = Guid.NewGuid();
-            var ingredient5 = Guid.NewGuid();
-            var ingredient6 = Guid.NewGuid();
-            var ingredient7 = Guid.NewGuid();
-            var ingredient8 = Guid.NewGuid();
-            var ingredient9 = Guid.NewGuid();
-            var ingredient10 = Guid.NewGuid();
-            var ingredient11 = Guid.NewGuid();
             if (!context.Pizzas.Any())
             {
                 context.Pizzas.AddRange(
@@ -36,7 +24,7 @@ namespace PizzaShopApplication.Models.Data.DBInitializer
                         Novelty = true,
                         Bestseller = true,
                         Discount = false,
-                        Id = pizza1
+                        //Id = 1
                     },
                     new Pizza
                     {
@@ -46,7 +34,7 @@ namespace PizzaShopApplication.Models.Data.DBInitializer
                         Novelty = true,
                         Bestseller = true,
                         Discount = false,
-                        Id = pizza2
+                        //Id = 2
                     });
             }
             if (!context.Ingredients.Any())
@@ -102,74 +90,61 @@ namespace PizzaShopApplication.Models.Data.DBInitializer
                 context.Recepts.AddRange(
                     new Recept
                     {
-                        PizzaId = pizza1,
-                        IngridientId = ingredient3
+                        PizzaId = 1,
+                        IngridientId = 3
                     },
                     new Recept
                     {
-                        PizzaId = pizza1,
-                        IngridientId = ingredient4
+                        PizzaId = 1,
+                        IngridientId = 4
                     },
                     new Recept
                     {
-                        PizzaId = pizza1,
-                        IngridientId = ingredient5
+                        PizzaId = 1,
+                        IngridientId = 5
                     },
                     new Recept
                     {
-                        PizzaId = pizza1,
-                        IngridientId = ingredient6
+                        PizzaId = 1,
+                        IngridientId = 6
                     },
                     new Recept
                     {
-                        PizzaId = pizza1,
-                        IngridientId = ingredient2
+                        PizzaId = 1,
+                        IngridientId = 2
                     },
                     new Recept
                     {
-                        PizzaId = pizza1,
-                        IngridientId = ingredient7
+                        PizzaId = 1,
+                        IngridientId = 7
                     },
                     new Recept
                     {
-                        PizzaId = pizza2,
-                        IngridientId = ingredient7
+                        PizzaId = 2,
+                        IngridientId = 7
                     },
                     new Recept
                     {
-                        PizzaId = pizza2,
-                        IngridientId = ingredient8
+                        PizzaId = 2,
+                        IngridientId = 8
                     },
                     new Recept
                     {
-                        PizzaId = pizza2,
-                        IngridientId = ingredient9
+                        PizzaId = 2,
+                        IngridientId = 9
                     },
                     new Recept
                     {
-                        PizzaId = pizza2,
-                        IngridientId = ingredient10
+                        PizzaId = 2,
+                        IngridientId = 10
                     },
                     new Recept
                     {
-                        PizzaId = pizza2,
-                        IngridientId = ingredient11
+                        PizzaId = 2,
+                        IngridientId = 11
                     });
             }
             context.SaveChanges();
-        }
-        public private void CreateARoles(ApplicationDataContext context)
-        {
-            string adminRoleName = "admin";
-            string userRoleName = "user";
-            string adminEmail = "admin@gmail.ru";
-            string adminPassword = "5juseuebok5";
-
-            // Добавление ролей.
-            context.Roles.Add(new Role { Id = 1, Name = adminRoleName });
-            context.Roles.Add(new Role { Id = 2, Name = userRoleName });
-            context.Users.Add(new User { Id = Guid.NewGuid(), Email = adminEmail, Password = adminPassword });
-
         }
     }
 }

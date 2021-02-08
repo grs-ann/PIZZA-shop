@@ -19,7 +19,7 @@ namespace PizzaShopApplication.Models.Entities
         public DateTime DateCreated { get; set; }
         // Идентификатор продукта, находящегося в корзине.
         //[ForeignKey("Pizza")]
-        public Guid PizzaId { get; set; }
+        public int PizzaId { get; set; }
         public virtual Pizza Pizza{ get; set; }
     }
 }

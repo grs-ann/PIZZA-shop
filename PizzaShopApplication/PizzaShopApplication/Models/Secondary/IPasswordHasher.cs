@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace PizzaShopApplication.Models.Secondary
 {
-    public interface IPasswordHasher
+    public interface IPasswordHasher : IDisposable
     {
         string GenerateHash(string password);
         bool IsPasswordMathcingHash(string password, string savedPasswordHash);

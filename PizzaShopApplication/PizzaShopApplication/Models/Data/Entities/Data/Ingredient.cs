@@ -11,7 +11,7 @@ namespace PizzaShopApplication.Models.Data
     public class Ingredient
     {
         [Key]
-        public Guid Id { get; set; }
+        public int Id { get; set; }
         // Название ингридиента
         public string Name { get; set; }
     }

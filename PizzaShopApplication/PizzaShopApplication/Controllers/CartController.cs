@@ -16,18 +16,18 @@ namespace PizzaShopApplication.Controllers
         {
             this.cart = cart;
         }
-        public async Task<IActionResult> AddItemToCart(Guid itemId, string itemName)
+        public async Task<IActionResult> AddItemToCart(int itemId, string itemName)
         {
             await cart.AddToCartAsync(itemId);
             ViewBag.Name = itemName;
             return View();
         }
-        public async Task<IActionResult> AddItemToCartChangeEvent(Guid itemId)
+        public async Task<IActionResult> AddItemToCartChangeEvent(int itemId)
         {
             await cart.AddToCartAsync(itemId);
             return RedirectPermanent("~/Cart/GetUserCartInfo");
         }
-        public async Task<IActionResult> DeleteItemFromCart(Guid itemId)
+        public async Task<IActionResult> DeleteItemFromCart(int itemId)
         {
             await cart.DeleteFromCartAsync(itemId);
             return RedirectPermanent("~/Cart/GetUserCartInfo");

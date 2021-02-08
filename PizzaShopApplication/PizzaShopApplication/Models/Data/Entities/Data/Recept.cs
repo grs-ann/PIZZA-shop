@@ -12,9 +12,9 @@ namespace PizzaShopApplication.Models.Data
     public class Recept
     {
         [Key]
-        public Guid Id { get; set; }
-        public Guid PizzaId { get; set; }
-        public Guid IngridientId { get; set; }
+        public int Id { get; set; }
+        public int PizzaId { get; set; }
+        public int IngridientId { get; set; }
         public virtual Pizza Pizza { get; set; }
         public virtual Ingredient Ingredient { get; set; }
     }

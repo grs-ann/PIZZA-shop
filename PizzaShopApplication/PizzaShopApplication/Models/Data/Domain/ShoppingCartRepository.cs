@@ -25,7 +25,7 @@ namespace PizzaShopApplication.Models.Data.Domain
         }
         // Ключ для кук.
         public const string CookieKey = "CartId";
-        public async Task AddToCartAsync(Guid id)
+        public async Task AddToCartAsync(int id)
         {
             // Получение продукта из базы данных
             Guid ShoppingCartId = GetCartId();
@@ -55,7 +55,7 @@ namespace PizzaShopApplication.Models.Data.Domain
             }
             await dbContext.SaveChangesAsync();
         }
-        public async Task DeleteFromCartAsync(Guid id)
+        public async Task DeleteFromCartAsync(int id)
         {
             // Получение продукта из базы данных
             Guid ShoppingCartId = GetCartId();

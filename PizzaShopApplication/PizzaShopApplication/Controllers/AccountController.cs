@@ -16,7 +16,6 @@ namespace PizzaShopApplication.Controllers
 {
     public class AccountController : Controller
     {
-        string test;
         private ApplicationDataContext dbContext;
         private IPasswordHasher hasher;
         public AccountController(ApplicationDataContext dbContext, IPasswordHasher hasher)
@@ -45,7 +44,7 @@ namespace PizzaShopApplication.Controllers
                     if (user != null)
                     {
                         // Аутентификация.
-                        await Authenticate(model.Email);
+                        await Authenticate(user);
                         return RedirectToAction("Index", "Home");
                     }
                 }
@@ -65,10 +64,17 @@ namespace PizzaShopApplication.Controllers
                 if (user == null)
                 {
                     var hashPassword = hasher.GenerateHash(model.Password);
-                    await dbContext.Users.AddAsync(new User { Email = model.Email, Password = hashPassword });
-                    // Аутентификация.
-                    await Authenticate(model.Email);
+                    user = new User { Email = model.Email, Password = hashPassword };
+                    var userRole = await dbContext.Roles.FirstOrDefaultAsync(r => r.Name == "user");
+                    if (userRole != null)
+                    {
+                        user.Role = userRole;
+                    }
+                    // Добавление пользователя в бд.
+                    await dbContext.Users.AddAsync(user);
                     await dbContext.SaveChangesAsync();
+                    // Аутентификация.
+                    await Authenticate(user);
                     return RedirectToAction("Index", "Home");
                 }
                 else
@@ -83,14 +89,16 @@ namespace PizzaShopApplication.Controllers
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             return RedirectToAction("Login", "Account");
         }
-        private async Task Authenticate(string userName)
+        private async Task Authenticate(User user)
         {
             var claims = new List<Claim>
             {
-                new Claim(ClaimsIdentity.DefaultNameClaimType, userName)
-            };
+                new Claim(ClaimsIdentity.DefaultNameClaimType, user.Email),
+                new Claim(ClaimsIdentity.DefaultRoleClaimType, user.Role?.Name)
+            };  
             // Cоздаем объект ClaimsIdentity.
-            ClaimsIdentity id = new ClaimsIdentity(claims, "ApplicationCookie", ClaimsIdentity.DefaultNameClaimType, ClaimsIdentity.DefaultRoleClaimType);
+            var id = new ClaimsIdentity(claims, "ApplicationCookie", ClaimsIdentity.DefaultNameClaimType, 
+                ClaimsIdentity.DefaultRoleClaimType);
             // Установка аутентификационных кук.
             await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(id));
         }
