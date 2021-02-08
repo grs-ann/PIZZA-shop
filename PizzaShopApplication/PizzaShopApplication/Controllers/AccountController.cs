@@ -34,7 +34,9 @@ namespace PizzaShopApplication.Controllers
         {
             if (ModelState.IsValid)
             {
-                User user = await dbContext.Users.FirstOrDefaultAsync(u => u.Email == model.Email);
+                User user = await dbContext.Users
+                    .Include(u => u.Role)
+                    .FirstOrDefaultAsync(u => u.Email == model.Email);
                 if (!hasher.IsPasswordMathcingHash(model.Password, user.Password))
                 {
                     ModelState.AddModelError("", "Некорректные логин и(или) пароль");
