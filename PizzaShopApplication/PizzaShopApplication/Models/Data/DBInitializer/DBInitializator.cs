@@ -1,6 +1,7 @@
 ﻿using PizzaShopApplication.Models.Data.Context;
 using PizzaShopApplication.Models.Data.Entities;
 using PizzaShopApplication.Models.Data.Entities.Authentification;
+using PizzaShopApplication.Models.Data.Entities.Data;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,6 +14,20 @@ namespace PizzaShopApplication.Models.Data.DBInitializer
         // При пустой БД заполняет таблицы тестовыми начальными данными.
         public static void Initialize(ApplicationDataContext context)
         {
+            if (!context.Images.Any())
+            {
+                context.Images.AddRange(
+                    new Image
+                    {
+                        Name = "cheese.png",
+                        Path = "/images/"
+                    },
+                    new Image
+                    {
+                        Name = "chicken.png",
+                        Path = "/images/"
+                    });
+            }
             if (!context.Pizzas.Any())
             {
                 context.Pizzas.AddRange(
@@ -24,7 +39,7 @@ namespace PizzaShopApplication.Models.Data.DBInitializer
                         Novelty = true,
                         Bestseller = true,
                         Discount = false,
-                        //Id = 1
+                        ImageId = 1
                     },
                     new Pizza
                     {
@@ -34,7 +49,7 @@ namespace PizzaShopApplication.Models.Data.DBInitializer
                         Novelty = true,
                         Bestseller = true,
                         Discount = false,
-                        //Id = 2
+                        ImageId = 2
                     });
             }
             if (!context.Ingredients.Any())

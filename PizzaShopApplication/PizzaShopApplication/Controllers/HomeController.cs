@@ -24,7 +24,7 @@ namespace PizzaShopApplication.Controllers
         [HttpGet]
         public async Task<IActionResult> Index()
         {
-            var pizzas = await pizzaRepository.GetPizzasAsync();
+            var pizzas = await pizzaRepository.GetPizzasForUsersAsync();
             return View(pizzas);
         }
     }

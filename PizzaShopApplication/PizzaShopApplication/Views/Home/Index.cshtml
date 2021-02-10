@@ -1,26 +1,37 @@
-﻿@using PizzaShopApplication.Models.Data;
-@model List<Pizza>
+﻿@using PizzaShopApplication.Models.Secondary.Entities;
+@model List<PizzaImager>
 @{
     ViewData["Title"] = "Доставка пиццы в Самаре бесплатно. Пиццерия КАРАСИК";
 }
-
+<link rel="stylesheet" type="text/css" href="~/css/table.css"/>
 <div>
     <h1 align="left">ПИЦЦА</h1>
     <h3 align="left">Горячая и вкусная пицца в ваш дом!</h3>
     <h5 align="left">Сделано с любовью!</h5>
     <table>
-        @foreach (Pizza item in Model)
+        <tr>
+            <th>Наименование товара</th>
+            <th>Цена, руб.</th>
+            <th></th>
+            <th></th>
+        </tr>
+        @foreach (var item in Model)
         {
             <tr>
                 <td>
-                    <p>Title: @item.Name</p>
-                    <p>Price: @item.Price</p>
+                    <p>@item.PizzaName</p>
+                </td>
+                <td>
+                    <p>@item.PizzaPrice</p>
+                </td>
+                <td>
+                    <img src="@item.ImagePath" height="200", width="200"/>
                 </td>
                 <td>
                     <form method="post" action="/Cart/AddItemToCart">
-                        <input hidden type="text" name="itemId" value="@item.Id"/>
-                        <input hidden type="text" name="itemName" value="@item.Name"/>
-                        <input type="submit" class="btn btn-default" value="Add to the cart"/>
+                        <input hidden type="text" name="itemId" value="@item.PizzaId" />
+                        <input hidden type="text" name="itemName" value="@item.PizzaName" />
+                        <input type="submit" class="btn alert-dark" value="Добавить в корзину" />
                     </form>
                 </td>
             </tr>

@@ -1,0 +1,16 @@
+﻿table{
+    border-spacing: 35px, 0;
+    border: 1px solid black; /*Рамка вокруг таблицы*/
+
+}
+th {
+    background: #ccc;
+    padding: 3px;
+    text-align: center;
+    border: 1px solid black; /*Граница вокруг ячеек*/
+}
+td {
+    padding: 10px 0;
+    text-align: center;
+    border: 1px solid black; 
+}

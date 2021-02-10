@@ -1,9 +1,13 @@
 ﻿@model PizzaShopApplication.Models.Data.Pizza;
 <h3>Добавление продукта</h3>
 
-<form asp-action="AddProductToDB" asp-controller="Product" asp-anti-forgery="true">
+
+<form asp-action="AddProductToDB" asp-controller="Product" asp-anti-forgery="true" enctype="multipart/form-data">
     <div class="validation" asp-validation-summary="All"></div>
     <div>
+        <div class="form-group">
+            <input type="file" name="uploadedFile"/>
+        </div>
         <div class="form-group">
             <label asp-for="Name">Наименование</label>
             <input type="text" asp-for="Name" />
@@ -29,7 +33,7 @@
             <input type="checkbox" asp-for="Discount" />
         </div>
         <div class="form-group">
-            <input type="submit" value="Подтвердить изменения" class="btn btn-outline-dark" />
+            <input type="submit" value="Добавить товар" class="btn btn-outline-dark" />
         </div>
     </div>
 </form>

@@ -8,4 +8,13 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="5.0.2" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Resource Include="wwwroot\images\cheese.png" />
+    <Resource Include="wwwroot\images\chicken.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="wwwroot\images\" />
+  </ItemGroup>
+
 </Project>

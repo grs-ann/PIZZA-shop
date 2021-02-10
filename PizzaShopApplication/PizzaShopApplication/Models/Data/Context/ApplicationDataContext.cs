@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using PizzaShopApplication.Models.Data.Entities;
 using PizzaShopApplication.Models.Data.Entities.Authentification;
+using PizzaShopApplication.Models.Data.Entities.Data;
 using PizzaShopApplication.Models.Entities;
 using PizzaShopApplication.Models.Secondary;
 
@@ -19,6 +20,7 @@ namespace PizzaShopApplication.Models.Data.Context
         public DbSet<Recept> Recepts { get; set; }
         public DbSet<Order> Orders { get; set; }
         public DbSet<Cart> ShoppingCartItems { get; set; }
+        public DbSet<Image> Images { get; set; }
         public ApplicationDataContext(DbContextOptions<ApplicationDataContext> options) : base(options)
         {
             Database.EnsureCreated();
