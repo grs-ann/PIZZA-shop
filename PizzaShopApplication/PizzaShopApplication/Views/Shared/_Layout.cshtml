@@ -34,7 +34,8 @@
                             </li>
                             <li>
                                 <a class="nav-link text-dark" asp-controller="Account" asp-action="Register">Регистрация</a>
-                            </li> 
+                            </li>
+
                         }
                         else
                         {
@@ -49,6 +50,12 @@
                         {
                             <li>
                                 <a class="nav-link text-dark" asp-controller="Product" asp-action="ChangeProducts">Редактировать товары</a>
+                            </li>
+                        }
+                        @if (User.IsInRole("admin") || User.IsInRole("dispatcher"))
+                        {
+                            <li>
+                                <a class="nav-link text-dark" asp-controller="Order" asp-action="GetOrders">Пользовательские заказы</a>
                             </li>
                         }
                     </ul>
