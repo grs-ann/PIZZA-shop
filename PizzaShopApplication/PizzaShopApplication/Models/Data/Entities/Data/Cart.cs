@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace PizzaShopApplication.Models.Entities
+namespace PizzaShopApplication.Models.Data.Entities.Data
 {
     public class Cart
     {
@@ -18,8 +18,7 @@ namespace PizzaShopApplication.Models.Entities
         public int Quantity { get; set; }
         public DateTime DateCreated { get; set; }
         // Идентификатор продукта, находящегося в корзине.
-        //[ForeignKey("Pizza")]
         public int PizzaId { get; set; }
-        public virtual Pizza Pizza{ get; set; }
+        public Pizza Pizza{ get; set; }
     }
 }

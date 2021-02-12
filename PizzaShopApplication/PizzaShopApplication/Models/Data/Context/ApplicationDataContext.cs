@@ -6,7 +6,6 @@ using Microsoft.EntityFrameworkCore;
 using PizzaShopApplication.Models.Data.Entities;
 using PizzaShopApplication.Models.Data.Entities.Authentification;
 using PizzaShopApplication.Models.Data.Entities.Data;
-using PizzaShopApplication.Models.Entities;
 using PizzaShopApplication.Models.Secondary;
 
 namespace PizzaShopApplication.Models.Data.Context
@@ -19,8 +18,9 @@ namespace PizzaShopApplication.Models.Data.Context
         public DbSet<Ingredient> Ingredients { get; set; }
         public DbSet<Recept> Recepts { get; set; }
         public DbSet<Order> Orders { get; set; }
-        public DbSet<Cart> ShoppingCartItems { get; set; }
+        public DbSet<Cart> Carts { get; set; }
         public DbSet<Image> Images { get; set; }
+        public DbSet<OrderStatus> OrderStatuses { get; set; }
         public ApplicationDataContext(DbContextOptions<ApplicationDataContext> options) : base(options)
         {
             Database.EnsureCreated();
@@ -35,12 +35,14 @@ namespace PizzaShopApplication.Models.Data.Context
             // Добавляем роли.
             Role adminRole = new Role { Id = 1, Name = adminRoleName };
             Role userRole = new Role { Id = 2, Name = userRoleName };
+            Role dispatcherRole = new Role { Id = 3, Name = "dispatcher" };
             using (PasswordHasher ph = new PasswordHasher())
             {
                 User adminUser = new User { Id = 1, Email = adminEmail, Password = ph.GenerateHash(adminPassword), RoleId = adminRole.Id };
-                modelBuilder.Entity<User>().HasData(new User[] { adminUser });
+                User dispatcherUser = new User { Id = 2, Email = "gera@mail.ru", Password = ph.GenerateHash("qwerty"), RoleId = dispatcherRole.Id };
+                modelBuilder.Entity<User>().HasData(new User[] { adminUser, dispatcherUser });
             }
-            modelBuilder.Entity<Role>().HasData(new Role[] { adminRole, userRole });
+            modelBuilder.Entity<Role>().HasData(new Role[] { adminRole, userRole, dispatcherRole });
             
             base.OnModelCreating(modelBuilder);
         }

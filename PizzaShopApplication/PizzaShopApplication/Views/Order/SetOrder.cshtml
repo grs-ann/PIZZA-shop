@@ -1,0 +1,72 @@
+﻿@using PizzaShopApplication.Models.Data.Entities.Data;
+@using PizzaShopApplication.Models.Secondary.Entities;
+@model Order
+@{
+    ViewData["Title"] = "Оформление заказа";
+}
+<h1>Ваш заказ:</h1>
+<table>
+    <tr>
+        <th>Название товара</th>
+        <th>Количество</th>
+        <th>Цена(за шт.)</th>
+    </tr>
+    @foreach (UserCartInformer item in ViewBag.userCart)
+    {
+        <tr>
+            <td>@item.PizzaName</td>
+            <td>@item.PizzaCount</td>
+            <td>@item.PizzaPrice</td>
+        </tr>
+    }
+</table>
+<h3>Итоговая сумма заказа:@ViewBag.TotalSum</h3>
+
+<form asp-action="SetOrder" asp-controller="Order">
+    <div class="validation" asp-validation-summary="All"></div>
+    <div>
+        <div class="form-group">
+            <label asp-for="ClientName">Введите ваше имя*:</label>
+            <input type="text" asp-for="ClientName" />
+            <span asp-validation-for="ClientName" />
+        </div>
+        <div class="form-group">
+            <label asp-for="Phone">Введите ваш номер телефона*:</label>
+            <input type="text" asp-for="Phone" />
+            <span asp-validation-for="Phone" />
+        </div>
+        <div class="form-group">
+            <label asp-for="Email">Укажите почту:</label>
+            <input type="text" asp-for="Email" />
+            <span asp-validation-for="Email" />
+        </div>
+        <div class="form-group">
+            <label asp-for="Street">Укажите улицу*:</label>
+            <input type="text" asp-for="Street" />
+            <span asp-validation-for="Street" />
+        </div>
+        <div class="form-group">
+            <label asp-for="Home">Введите номер дома*:</label>
+            <input type="text" asp-for="Home" />
+            <span asp-validation-for="Home" />
+        </div>
+        <div class="form-group">
+            <label asp-for="Apartment">Укажите номер квартиры:</label>
+            <input type="text" asp-for="Apartment" />
+            <span asp-validation-for="Apartment" />
+        </div>
+        <div class="form-group">
+            <label asp-for="EntranceNubmer">Укажите номер подъезда:</label>
+            <input type="number" asp-for="EntranceNubmer" />
+            <span asp-validation-for="EntranceNubmer" />
+        </div>
+        <div class="form-group">
+            <label asp-for="FloorNubmer">Укажите номер этажа:</label>
+            <input type="number" asp-for="FloorNubmer" />
+            <span asp-validation-for="FloorNubmer" />
+        </div>
+        <div class="form-group">
+            <input type="submit" value="Заказать" class="btn btn-outline-dark" />
+        </div>
+    </div>
+</form>

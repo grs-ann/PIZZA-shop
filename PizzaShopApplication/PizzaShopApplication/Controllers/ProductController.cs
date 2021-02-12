@@ -17,7 +17,7 @@ namespace PizzaShopApplication.Controllers
     [Authorize(Roles = "admin")]
     public class ProductController : Controller
     {
-        private ApplicationDataContext dbContext;
+        private readonly ApplicationDataContext dbContext;
         private readonly PizzaRepository pizzaRepository;
         private readonly IWebHostEnvironment appEnvironment;
         public ProductController(ApplicationDataContext dbContext, PizzaRepository pizzaRepository, IWebHostEnvironment appEnvironment)

@@ -11,5 +11,6 @@ namespace PizzaShopApplication.Models.Secondary.Entities
         public decimal PizzaPrice { get; set; }
         public int PizzaCount { get; set; }
         public int PizzaId { get; set; }
+        public string ShoppingCartId { get; set; }
     }
 }

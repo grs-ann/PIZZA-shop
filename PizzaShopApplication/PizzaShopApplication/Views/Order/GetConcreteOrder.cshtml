@@ -1,0 +1,83 @@
+﻿@using PizzaShopApplication.Models.Data.Entities.Data;
+@model IEnumerable<Cart>
+@{
+    ViewData["Title"] = $"Заказ № {@ViewBag.Order.Id}";
+}
+<table>
+    <tr>
+        <th>Номер заказа</th>
+        <th>Дата заказа</th>
+        <th>Имя</th>
+        <th>Телефон</th>
+        <th>Комментарий</th>
+        <th>Улица</th>
+        <th>Дом</th>
+        <th>Квартира</th>
+        <th>Подъезд</th>
+        <th>Этаж</th>
+        <th>Почта</th>
+
+    </tr>
+    <tr>
+        <td>
+            <p>@ViewBag.Order.Id</p>
+        </td>
+        <td>
+            <p>@ViewBag.Order.OrderDateTime</p>
+        </td>
+        <td>
+            <p>@ViewBag.Order.ClientName</p>
+        </td>
+        <td>
+            <p>@ViewBag.Order.Phone</p>
+        </td>
+        <td>
+            <p>@ViewBag.Order.Comment</p>
+        </td>
+        <td>
+            <p>@ViewBag.Order.Street</p>
+        </td>
+        <td>
+            <p>@ViewBag.Order.Home</p>
+        </td>
+        <td>
+            <p>@ViewBag.Order.Apartment</p>
+        </td>
+        <td>
+            <p>@ViewBag.Order.EntranceNubmer</p>
+        </td>
+        <td>
+            <p>@ViewBag.Order.FloorNubmer</p>
+        </td>
+        <td>
+            <p>@ViewBag.Order.Email</p>
+        </td>
+    </tr>
+</table>
+<h1>Заказанные товары:</h1>
+<table>
+    <tr>
+        <th>Наименование</th>
+        <th>Количество</th>
+    </tr>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>@item.Pizza.Name</td>
+            <td>@item.Quantity</td>
+        </tr>
+    }
+</table>
+<h1>СТАТУС ЗАКАЗА: @ViewBag.Order.OrderStatus.Status</h1>
+
+<form id="statusForm" method="post" action="/Order/GetConcreteOrder">
+    <input hidden name="orderId" value="@ViewBag.Order.Id" />
+    <input hidden name="cartUserId" value="@Model.FirstOrDefault().UserId" />
+    <input type="submit" value="Изменить статус заказа" />
+</form>
+<select name="statusId" form="statusForm">
+    <option>Выберите статус заказа</option>
+    <option value="1">В процессе доставки</option>
+    <option value="3">Заказ доставлен</option>
+    <option value="2">Заказ отменён</option>
+</select>

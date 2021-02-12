@@ -14,6 +14,31 @@ namespace PizzaShopApplication.Models.Data.DBInitializer
         // При пустой БД заполняет таблицы тестовыми начальными данными.
         public static void Initialize(ApplicationDataContext context)
         {
+            if (!context.OrderStatuses.Any())
+            {
+                context.OrderStatuses.AddRange(
+                    // Заказ в процессе доставки.
+                    new OrderStatus
+                    {
+                        InProcess = true,
+                        Cancelled = false,
+                        Status = "В процессе доставки"
+                    },
+                    // Заказ доставлен.
+                    new OrderStatus
+                    {
+                        InProcess = false,
+                        Cancelled = false,
+                        Status = "Заказ доставлен"
+                    },
+                    // Заказ отменён.
+                    new OrderStatus
+                    {
+                        InProcess = false,
+                        Cancelled = true,
+                        Status = "Заказ отменён"
+                    });
+            }
             if (!context.Images.Any())
             {
                 context.Images.AddRange(

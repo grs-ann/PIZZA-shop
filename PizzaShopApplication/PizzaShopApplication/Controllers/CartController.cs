@@ -32,7 +32,6 @@ namespace PizzaShopApplication.Controllers
             await cart.DeleteFromCartAsync(itemId);
             return RedirectPermanent("~/Cart/GetUserCartInfo");
         }
-        //[Route("Cart/GetUserCartInfo")]
         public async Task<IActionResult> GetUserCartInfo()
         {
             var cartItems = await cart.GetCartItemsAsync();

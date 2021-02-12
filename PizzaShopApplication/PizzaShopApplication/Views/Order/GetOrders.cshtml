@@ -1,0 +1,45 @@
+﻿@using PizzaShopApplication.Models.Data.Entities.Data;
+@model IEnumerable<Order>
+@{
+    ViewData["Title"] = "Клиентские заказы";
+}
+<table>
+    <tr>
+        <th>Номер заказа</th>
+        <th>Дата</th>
+        <th>Имя</th>
+        <th>Телефон</th>
+        <th>Комментарий</th>
+        <th>Статус заказа</th>
+    </tr>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                <p>@item.Id</p>
+            </td>
+            <td>
+                <p>@item.OrderDateTime</p>
+            </td>
+            <td>
+                <p>@item.ClientName</p>
+            </td>
+            <td>
+                <p>@item.Phone</p>
+            </td>
+            <td>
+                <p>@item.Comment</p>
+            </td>
+            <td>
+                <p>@item.OrderStatus.Status</p>
+            </td>
+            <td>
+                <form method="get" action="/Order/GetConcreteOrder">
+                    <input hidden name="userCartId" value="@item.UserCartForeignKey.ToString()" />
+                    <input hidden name="orderId" value="@item.Id" />
+                    <input type="submit" class="btn alert-dark" value="Показать" />
+                </form>
+            </td>
+        </tr>
+    }
+</table>
