@@ -1,9 +1,11 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using PizzaShopApplication.Models.Data.Context;
 using PizzaShopApplication.Models.Data.Domain.Interfaces;
 using PizzaShopApplication.Models.Data.Entities.Data;
+using PizzaShopApplication.Models.Filtration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,16 +25,34 @@ namespace PizzaShopApplication.Models.Data.Domain
             _httpContext = httpContext;
             _cartRepository = cartRepository;
         }
-        public IEnumerable<Order> GetOrders()
+        // Получает список заказов с встроенной системой фильтрации.
+        public async Task<OrderListViewModel> GetOrdersWithFiltration(int? orderStatusId, int? orderId, DateTime date)
         {
-            if (_httpContext.HttpContext.User.IsInRole("admin"))
+            IEnumerable<Order> orders = _dbContext.Orders.Include(o => o.OrderStatus);
+            if (orderStatusId != null && orderStatusId != 0)
             {
-                return _dbContext.Orders.Include(o => o.OrderStatus);
+                orders = orders.Where(o => o.OrderStatusId == orderStatusId);
             }
-            else
+            if (orderId != null && orderId != 0)
             {
-                return _dbContext.Orders.Include(o => o.OrderStatus).Where(o => o.OrderDateTime >= DateTime.UtcNow.AddDays(-7));
+                orders = orders.Where(o => o.Id == orderId);
             }
+            // В случае, если поле во View будет не заполнено,
+            // то значение даты будет эквивалентно DateTime.MinValue.
+            if (date != null && date != DateTime.MinValue)
+            {
+                orders = orders.Where(o => o.OrderDateTime.Date == date.Date);
+            }
+            var orderStatuses = await _dbContext.OrderStatuses.ToListAsync();
+            orderStatuses.Insert(0, new OrderStatus { Id = 0, Status = "Все" });
+            OrderListViewModel viewModel = new OrderListViewModel
+            {
+                Orders = orders,
+                Date = date,
+                OrderId = orderId,
+                OrderStatuses = new SelectList(orderStatuses, "Id", "Status")
+            };
+            return viewModel;
         }
         // Добавляет заказ в базу данных.
         public async Task AddOrderToDBAsync(Order order)

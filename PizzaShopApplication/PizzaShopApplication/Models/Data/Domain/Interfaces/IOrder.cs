@@ -1,4 +1,5 @@
 ﻿using PizzaShopApplication.Models.Data.Entities.Data;
+using PizzaShopApplication.Models.Filtration;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,7 +13,7 @@ namespace PizzaShopApplication.Models.Data.Domain.Interfaces
         public Task<Order> GetOrderFromDBAsync(Order order);
         public Task<Order> GetOrderFromDBAsync(int orderId);
         public Task ChangeOrderStatusAsync(int order, int orderStatusId);
-        public IEnumerable<Order> GetOrders();
+        public Task<OrderListViewModel> GetOrdersWithFiltration(int? orderStatusId, int? orderId, DateTime date);
         public IEnumerable<Cart> GetConcreteCartFromOrder(string id);
         public IEnumerable<OrderStatus> GetOrderStatuses();
 

@@ -35,10 +35,11 @@ namespace PizzaShopApplication.Controllers
                 $"\nВаш номер заказа: {order.Id}");
         }
         [HttpGet]
-        public IActionResult GetOrders()
+        public IActionResult GetOrders(int? orderStatusId, int? orderId, DateTime date)
         {
-            var orders = _orderRepository.GetOrders();
-            return View(orders);
+            //var orders = _orderRepository.GetOrders();
+            var ordersViewModel = _orderRepository.GetOrdersWithFiltration(orderStatusId, orderId, date).Result;
+            return View(ordersViewModel);
         }
         // Получает заказ по его Id. В заказе отображается информация 
         // по заказанным товарам, а так же информация о заказчике.

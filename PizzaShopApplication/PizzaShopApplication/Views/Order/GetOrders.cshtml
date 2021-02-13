@@ -1,8 +1,25 @@
-﻿@using PizzaShopApplication.Models.Data.Entities.Data;
-@model IEnumerable<Order>
+﻿@using PizzaShopApplication.Models.Filtration;
+@model OrderListViewModel
 @{
     ViewData["Title"] = "Клиентские заказы";
 }
+
+<form method="get">
+    <div class="form-inline form-group">
+        <label class="control-label">Номер заказа:</label>
+        <input name="orderId" class="form-control" />
+
+        <label class="control-label">Статус заказа:</label>
+        <select name="orderStatusId" asp-items="Model.OrderStatuses" class="form-control"></select>
+        <input type="submit" value="Отфильровать и найти" class="btn btn-sm" />
+    </div>
+    <div class="form-inline form-group">
+        <label class="control-label">Дата заказа:</label>
+        <input min="2021-01-01" max="2045-01-01" name="date" type="date" class="form-control" />
+    </div>
+</form>
+
+
 <table>
     <tr>
         <th>Номер заказа</th>
@@ -12,7 +29,7 @@
         <th>Комментарий</th>
         <th>Статус заказа</th>
     </tr>
-    @foreach (var item in Model)
+    @foreach (var item in Model.Orders)
     {
         <tr>
             <td>
