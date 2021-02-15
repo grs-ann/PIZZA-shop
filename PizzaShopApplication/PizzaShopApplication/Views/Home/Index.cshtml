@@ -1,5 +1,5 @@
-﻿@using PizzaShopApplication.Models.Secondary.Entities;
-@model List<PizzaImager>
+﻿@using PizzaShopApplication.Models.Data;
+@model IEnumerable<Pizza>
 @{
     ViewData["Title"] = "Доставка пиццы в Самаре бесплатно. Пиццерия КАРАСИК";
 }
@@ -19,18 +19,18 @@
         {
             <tr>
                 <td>
-                    <p>@item.PizzaName</p>
+                    <p>@item.Name</p>
                 </td>
                 <td>
-                    <p>@item.PizzaPrice</p>
+                    <p>@item.Price</p>
                 </td>
                 <td>
-                    <img src="@item.ImagePath" height="200", width="200"/>
+                    <img src="@(item.Image.Path + item.Image.Name)" height="200", width="200"/>
                 </td>
                 <td>
                     <form method="post" action="/Cart/AddItemToCart">
-                        <input hidden type="text" name="itemId" value="@item.PizzaId" />
-                        <input hidden type="text" name="itemName" value="@item.PizzaName" />
+                        <input hidden type="text" name="itemId" value="@item.Id" />
+                        <input hidden type="text" name="itemName" value="@item.Name" />
                         <input type="submit" class="btn alert-dark" value="Добавить в корзину" />
                     </form>
                 </td>

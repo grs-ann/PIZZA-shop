@@ -16,15 +16,15 @@ namespace PizzaShopApplication.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly PizzaRepository pizzaRepository;
-        public HomeController(PizzaRepository pizzaRepository)
+        private readonly ShowPizzaRepository pizzaRepository;
+        public HomeController(ShowPizzaRepository pizzaRepository)
         {
             this.pizzaRepository = pizzaRepository;
         }
         [HttpGet]
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-            var pizzas = await pizzaRepository.GetPizzasForUsersAsync();
+            var pizzas = pizzaRepository.GetProductsFromDB();
             return View(pizzas);
         }
     }

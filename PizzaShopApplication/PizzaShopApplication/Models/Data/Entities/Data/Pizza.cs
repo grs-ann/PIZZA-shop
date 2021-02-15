@@ -1,4 +1,5 @@
-﻿using PizzaShopApplication.Models.Data.Entities.Data;
+﻿using PizzaShopApplication.Models.Data.Domain.Interfaces;
+using PizzaShopApplication.Models.Data.Entities.Data;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -9,7 +10,7 @@ namespace PizzaShopApplication.Models.Data
 {
     // Данный класс предоставляет таблицу для пицц в БД
     // с полями, соответствующими определенным свойствам.
-    public class Pizza
+    public class Pizza : IProduct
     {
         [Key]
         public int Id { get; set; }

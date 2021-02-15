@@ -17,26 +17,29 @@ namespace PizzaShopApplication.Controllers
     [Authorize(Roles = "admin")]
     public class ProductController : Controller
     {
-        private readonly ApplicationDataContext dbContext;
-        private readonly PizzaRepository pizzaRepository;
-        private readonly IWebHostEnvironment appEnvironment;
-        public ProductController(ApplicationDataContext dbContext, PizzaRepository pizzaRepository, IWebHostEnvironment appEnvironment)
+        private readonly ApplicationDataContext _dbContext;
+        private readonly ShowPizzaRepository _showPizzaRepository;
+        private readonly EditPizzaDataRepository _editPizzaRepository;
+        private readonly IWebHostEnvironment _appEnvironment;
+        public ProductController(ApplicationDataContext dbContext, ShowPizzaRepository showPizzaRepository, 
+            IWebHostEnvironment appEnvironment, EditPizzaDataRepository editPizzaRepository)
         {
-            this.dbContext = dbContext;
-            this.pizzaRepository = pizzaRepository;
-            this.appEnvironment = appEnvironment;
+            _dbContext = dbContext;
+            _showPizzaRepository = showPizzaRepository;
+            _editPizzaRepository = editPizzaRepository;
+            _appEnvironment = appEnvironment;
         }
         [HttpGet]
         
-        public async Task<IActionResult> ChangeProducts()
+        public IActionResult ChangeProducts()
         {
-            var pizzas = await pizzaRepository.GetPizzasForEditAsync();
+            var pizzas = _showPizzaRepository.GetProductsFromDB();
             return View(pizzas);
         }
         [HttpGet]
         public async Task<IActionResult> EditProduct(int itemId)
         {
-            var pizza = await pizzaRepository.GetPizzaAsync(itemId);
+            var pizza = await _showPizzaRepository.GetProductFromDBAsync(itemId);
             return View(pizza);
         }
         [HttpGet]
@@ -57,7 +60,7 @@ namespace PizzaShopApplication.Controllers
                     return View(pizza);
                 }
                 var image = await AddImageFile(uploadedFile);
-                await pizzaRepository.AddNewPizzaAsync(pizza, image);
+                await _editPizzaRepository.AddNewPizzaAsync(pizza, image);
             }
             else
             {
@@ -73,7 +76,7 @@ namespace PizzaShopApplication.Controllers
         {
             if (ModelState.IsValid)
             {
-                await pizzaRepository.SaveChangesAsync(pizza, itemId, uploadedFile);
+                await _editPizzaRepository.EditPizzaAsync(pizza, itemId, uploadedFile);
             }
             else
             {
@@ -86,14 +89,14 @@ namespace PizzaShopApplication.Controllers
         // Удаление продукта из базы данных.
         public async Task<IActionResult> DeleteFromDB(int itemId)
         {
-            await pizzaRepository.DeleteAsync(itemId);
+            await _editPizzaRepository.DeletePizzaAsync(itemId);
             return RedirectPermanent("~/Product/ChangeProducts");
         }
         [HttpPost]
         // Добавление изображения товара в базу данных.
         public async Task<Image> AddImageFile(IFormFile uploadedFile)
         {
-            return await pizzaRepository.AddImageFileAsync(uploadedFile);
+            return await _editPizzaRepository.AddImageFileAsync(uploadedFile);
         }
     }
 }
