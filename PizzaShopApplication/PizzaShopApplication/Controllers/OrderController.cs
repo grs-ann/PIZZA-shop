@@ -10,7 +10,6 @@ using System.Threading.Tasks;
 
 namespace PizzaShopApplication.Controllers
 {
-    [Authorize(Roles = "admin, dispatcher")]
     public class OrderController : Controller
     {
         private readonly IOrder _orderRepository;
@@ -35,6 +34,7 @@ namespace PizzaShopApplication.Controllers
                 $"\nВаш номер заказа: {order.Id}");
         }
         [HttpGet]
+        [Authorize(Roles = "admin, dispatcher")]
         public IActionResult GetOrders(int? orderStatusId, int? orderId, DateTime date)
         {
             //var orders = _orderRepository.GetOrders();
@@ -44,6 +44,7 @@ namespace PizzaShopApplication.Controllers
         // Получает заказ по его Id. В заказе отображается информация 
         // по заказанным товарам, а так же информация о заказчике.
         [HttpGet]
+        [Authorize(Roles = "admin, dispatcher")]
         public IActionResult GetConcreteOrder(string userCartId, int orderId)
         {
             var order  = _orderRepository.GetOrderFromDBAsync(orderId).Result;
@@ -55,6 +56,7 @@ namespace PizzaShopApplication.Controllers
         }
         // Изменяет статус заказа.
         [HttpPost]
+        [Authorize(Roles = "admin, dispatcher")]
         public async Task<IActionResult> GetConcreteOrder(int orderId, int statusId, Guid cartUserId)
         {
             await _orderRepository.ChangeOrderStatusAsync(orderId, statusId);

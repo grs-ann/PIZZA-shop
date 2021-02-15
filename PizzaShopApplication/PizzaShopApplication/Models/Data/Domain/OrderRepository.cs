@@ -58,7 +58,7 @@ namespace PizzaShopApplication.Models.Data.Domain
         public async Task AddOrderToDBAsync(Order order)
         {
             // Устанавливает для заказа статус - в процессе доставки.
-            order.OrderStatusId = 1;
+            order.OrderStatusId = 3;
             order.OrderDateTime = DateTime.UtcNow;
             var cartGuid = _httpContext.HttpContext.Request.Cookies["CartId"];
             order.UserCartForeignKey = Guid.Parse(cartGuid);
