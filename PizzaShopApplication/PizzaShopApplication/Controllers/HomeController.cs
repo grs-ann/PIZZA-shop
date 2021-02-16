@@ -11,6 +11,7 @@ using PizzaShopApplication.Models;
 using PizzaShopApplication.Models.Data;
 using PizzaShopApplication.Models.Data.Context;
 using PizzaShopApplication.Models.Data.Domain;
+using PizzaShopApplication.Models.Pagination;
 
 namespace PizzaShopApplication.Controllers
 {
@@ -22,10 +23,21 @@ namespace PizzaShopApplication.Controllers
             this.pizzaRepository = pizzaRepository;
         }
         [HttpGet]
-        public IActionResult Index()
+        public IActionResult Index(int page=1)
         {
+            int pageSize = 1;
             var pizzas = pizzaRepository.GetProductsFromDB();
-            return View(pizzas);
+            var count = pizzas.Count();
+            var items = pizzas.Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToList();
+            PageViewModel pageViewModel = new PageViewModel(count, page, pageSize);
+            IndexViewModel viewModel = new IndexViewModel
+            {
+                PageViewModel = pageViewModel,
+                Pizzas = items
+            };
+            return View(viewModel);
         }
     }
 }

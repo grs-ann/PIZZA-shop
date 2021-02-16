@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace PizzaShopApplication.Models.Data.Domain.Abstract
 {
-    public abstract class ProductRepository
+    public abstract class ProductRepository<T> where T: IProduct
     {
         // Получает продукт из базы данных по Id.
-        public abstract Task<IProduct> GetProductFromDBAsync(int id);
+        public abstract Task<T> GetProductFromDBAsync(int id);
         // Получает перечисление всех продуктов из базы данных.
-        public abstract IEnumerable<IProduct> GetProductsFromDB();
+        public abstract IEnumerable<T> GetProductsFromDB();
     }
 }
