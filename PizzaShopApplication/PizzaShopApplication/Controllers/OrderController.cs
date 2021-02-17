@@ -1,7 +1,10 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using PizzaShopApplication.Models.Data.Context;
 using PizzaShopApplication.Models.Data.Domain.Interfaces;
 using PizzaShopApplication.Models.Data.Entities.Data;
+using PizzaShopApplication.Models.Filtration;
+using PizzaShopApplication.Models.Pagination;
 using PizzaShopApplication.Models.Secondary.Entities;
 using System;
 using System.Collections.Generic;
@@ -13,9 +16,11 @@ namespace PizzaShopApplication.Controllers
     public class OrderController : Controller
     {
         private readonly IOrder _orderRepository;
-        public OrderController(IOrder orderRepository)
+        private readonly ApplicationDataContext _dbContext;
+        public OrderController(IOrder orderRepository, ApplicationDataContext dbContext)
         {
             _orderRepository = orderRepository;
+            _dbContext = dbContext;
         }
         [HttpGet]
         public IActionResult SetOrder(string totalSum, List<UserCartInformer> userCart)
@@ -35,11 +40,25 @@ namespace PizzaShopApplication.Controllers
         }
         [HttpGet]
         [Authorize(Roles = "admin, dispatcher")]
-        public IActionResult GetOrders(int? orderStatusId, int? orderId, DateTime date)
+        public IActionResult GetOrders(int? orderStatusId, int? orderId, DateTime date, int page = 1)
         {
-            //var orders = _orderRepository.GetOrders();
-            var ordersViewModel = _orderRepository.GetOrdersWithFiltration(orderStatusId, orderId, date).Result;
-            return View(ordersViewModel);
+            // Получаем отфильтрованные данные.
+            var filteredOrders = _orderRepository.GetOrdersWithFiltration(orderStatusId, orderId, date);
+            // Для пагинации.
+            int pageSize = 10;
+            var count = filteredOrders.Count();
+            var items = filteredOrders.Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToList();
+            // Создаем новый обьект indexViewModel,
+            // чтобы отдать его во View.
+            IndexViewModel indexViewModel = new IndexViewModel
+            {
+                PageViewModel = new PageViewModel(count, page, pageSize),
+                FilterViewModel = new OrderListViewModel(filteredOrders, orderStatusId, orderId, date, _dbContext),
+                Orders = items
+            };
+            return View(indexViewModel);
         }
         // Получает заказ по его Id. В заказе отображается информация 
         // по заказанным товарам, а так же информация о заказчике.

@@ -23,21 +23,10 @@ namespace PizzaShopApplication.Controllers
             this.pizzaRepository = pizzaRepository;
         }
         [HttpGet]
-        public IActionResult Index(int page=1)
+        public IActionResult Index()
         {
-            int pageSize = 1;
             var pizzas = pizzaRepository.GetProductsFromDB();
-            var count = pizzas.Count();
-            var items = pizzas.Skip((page - 1) * pageSize)
-                .Take(pageSize)
-                .ToList();
-            PageViewModel pageViewModel = new PageViewModel(count, page, pageSize);
-            IndexViewModel viewModel = new IndexViewModel
-            {
-                PageViewModel = pageViewModel,
-                Pizzas = items
-            };
-            return View(viewModel);
+            return View(pizzas);
         }
     }
 }

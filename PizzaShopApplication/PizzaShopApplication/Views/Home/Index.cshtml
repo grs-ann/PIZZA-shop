@@ -1,8 +1,9 @@
-﻿@using PizzaShopApplication.Models.Pagination;
-@model IndexViewModel
+﻿@using PizzaShopApplication.Models.Data;
+@model IEnumerable<Pizza>
+@{
     ViewData["Title"] = "Доставка пиццы в Самаре бесплатно. Пиццерия КАРАСИК";
 }
-<link rel="stylesheet" type="text/css" href="~/css/table.css"/>
+<link rel="stylesheet" type="text/css" href="~/css/table.css" />
 <div>
     <h1 align="left">ПИЦЦА</h1>
     <h3 align="left">Горячая и вкусная пицца в ваш дом!</h3>
@@ -14,7 +15,7 @@
             <th></th>
             <th></th>
         </tr>
-        @foreach (var item in Model.Pizzas)
+        @foreach (var item in Model)
         {
             <tr>
                 <td>
@@ -36,22 +37,4 @@
             </tr>
         }
     </table>
-    @if (Model.PageViewModel.HasPreviousPage)
-    {
-        <a asp-action="Index"
-           asp-route-page="@(Model.PageViewModel.PageNumber - 1)"
-           class="btn btn-outline-dark">
-            <i class="glyphicon glyphicon-chevron-left"></i>
-            Назад
-        </a>
-    }
-    @if (Model.PageViewModel.HasNextPage)
-    {
-        <a asp-action="Index"
-           asp-route-page="@(Model.PageViewModel.PageNumber + 1)"
-           class="btn btn-outline-dark">
-            Вперед
-            <i class="glyphicon glyphicon-chevron-right"></i>
-        </a>
-    }
 </div>

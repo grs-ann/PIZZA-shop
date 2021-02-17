@@ -26,24 +26,24 @@ namespace PizzaShopApplication.Models.Data.Domain
             _cartRepository = cartRepository;
         }
         // Получает список заказов с встроенной системой фильтрации.
-        public async Task<OrderListViewModel> GetOrdersWithFiltration(int? orderStatusId, int? orderId, DateTime date)
+        public List<Order> GetOrdersWithFiltration(int? orderStatusId, int? orderId, DateTime date)
         {
-            IEnumerable<Order> orders = _dbContext.Orders.Include(o => o.OrderStatus);
+            var orders = _dbContext.Orders.Include(o => o.OrderStatus).ToListAsync().Result;
             if (orderStatusId != null && orderStatusId != 0)
             {
-                orders = orders.Where(o => o.OrderStatusId == orderStatusId);
+                orders = orders.Where(o => o.OrderStatusId == orderStatusId).ToList();
             }
             if (orderId != null && orderId != 0)
             {
-                orders = orders.Where(o => o.Id == orderId);
+                orders = orders.Where(o => o.Id == orderId).ToList();
             }
             // В случае, если поле во View будет не заполнено,
             // то значение даты будет эквивалентно DateTime.MinValue.
             if (date != null && date != DateTime.MinValue)
             {
-                orders = orders.Where(o => o.OrderDateTime.Date == date.Date);
+                orders = orders.Where(o => o.OrderDateTime.Date == date.Date).ToList();
             }
-            var orderStatuses = await _dbContext.OrderStatuses.ToListAsync();
+            /*var orderStatuses = await _dbContext.OrderStatuses.ToListAsync();
             orderStatuses.Insert(0, new OrderStatus { Id = 0, Status = "Все" });
             OrderListViewModel viewModel = new OrderListViewModel
             {
@@ -52,7 +52,8 @@ namespace PizzaShopApplication.Models.Data.Domain
                 OrderId = orderId,
                 OrderStatuses = new SelectList(orderStatuses, "Id", "Status")
             };
-            return viewModel;
+            return viewModel;*/
+            return orders;
         }
         // Добавляет заказ в базу данных.
         public async Task AddOrderToDBAsync(Order order)

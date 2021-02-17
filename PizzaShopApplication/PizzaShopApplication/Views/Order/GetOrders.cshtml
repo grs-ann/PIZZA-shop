@@ -1,16 +1,17 @@
-﻿@using PizzaShopApplication.Models.Filtration;
-@model OrderListViewModel
+﻿@using PizzaShopApplication.Models.Pagination;
+@model IndexViewModel
 @{
     ViewData["Title"] = "Клиентские заказы";
 }
-
+@*подключаем все tag-хелперы*@
+@addTagHelper *, PizzaShopApplication
 <form method="get">
     <div class="form-inline form-group">
         <label class="control-label">Номер заказа:</label>
         <input name="orderId" class="form-control" />
 
         <label class="control-label">Статус заказа:</label>
-        <select name="orderStatusId" asp-items="Model.OrderStatuses" class="form-control"></select>
+        <select name="orderStatusId" asp-items="Model.FilterViewModel.OrderStatuses" class="form-control"></select>
         <input type="submit" value="Отфильровать и найти" class="btn btn-sm" />
     </div>
     <div class="form-inline form-group">
@@ -60,3 +61,4 @@
         </tr>
     }
 </table>
+<page-link page-model="Model.PageViewModel" page-action="GetOrders"></page-link>
