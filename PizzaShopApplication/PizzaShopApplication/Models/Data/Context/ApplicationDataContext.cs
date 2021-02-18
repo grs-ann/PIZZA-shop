@@ -14,9 +14,10 @@ namespace PizzaShopApplication.Models.Data.Context
     {
         public DbSet<User> Users { get; set; }
         public DbSet<Role> Roles { get; set; }
-        public DbSet<Pizza> Pizzas { get; set; }
-        public DbSet<Ingredient> Ingredients { get; set; }
-        public DbSet<Recept> Recepts { get; set; }
+        public DbSet<Product> Products { get; set; }
+        public DbSet<ProductProperty> ProductProperties { get; set; }
+        public DbSet<ProductType> ProductTypes { get; set; }
+        public DbSet<Property> Properties { get; set; }
         public DbSet<Order> Orders { get; set; }
         public DbSet<Cart> Carts { get; set; }
         public DbSet<Image> Images { get; set; }

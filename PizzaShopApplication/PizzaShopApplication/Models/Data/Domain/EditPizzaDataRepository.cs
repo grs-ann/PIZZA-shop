@@ -23,26 +23,25 @@ namespace PizzaShopApplication.Models.Data.Domain
             _appEnvironment = appEnvironment;
         }
         // Добавляет новую пиццу в базу данных.
-        public async Task AddNewPizzaAsync(Pizza pizza, Image image)
+        public async Task AddNewPizzaAsync(Product product, Image image)
         {
-            _dbContext.Pizzas.Add(
-                new Pizza()
+            _dbContext.Products.Add(
+                new Product()
                 {
-                    Name = pizza.Name,
-                    Price = pizza.Price,
-                    Diameter = pizza.Diameter,
-                    Novelty = pizza.Novelty,
-                    Bestseller = pizza.Bestseller,
-                    Discount = pizza.Discount,
+                    Name = product.Name,
+                    Price = product.Price,
+                    Novelty = product.Novelty,
+                    Bestseller = product.Bestseller,
+                    Discount = product.Discount,
                     ImageId = image.Id,
                     Image = _dbContext.Images.FirstOrDefaultAsync(i => i.Id == image.Id).Result
                 });
             await _dbContext.SaveChangesAsync();
         }
         // Изменяет информацию о пицце.
-        public async Task EditPizzaAsync(Pizza pizza, int id, IFormFile uploadedFile)
+        public async Task EditPizzaAsync(Product product, int id, IFormFile uploadedFile)
         {
-            var pizzaToChange = _dbContext.Pizzas.Include(p => p.Image).
+            var pizzaToChange = _dbContext.Products.Include(p => p.Image).
                 FirstOrDefaultAsync(p => p.Id == id).Result;
             if (uploadedFile != null)
             {
@@ -53,24 +52,23 @@ namespace PizzaShopApplication.Models.Data.Domain
                 // его из приложения и из базы данных.
                 CheckImageUsing(pizzaToChange);
             }
-            pizzaToChange.Name = pizza.Name;
-            pizzaToChange.Price = pizza.Price;
-            pizzaToChange.Diameter = pizza.Diameter;
-            pizzaToChange.Novelty = pizza.Novelty;
-            pizzaToChange.Bestseller = pizza.Bestseller;
-            pizzaToChange.Discount = pizza.Discount;
+            pizzaToChange.Name = product.Name;
+            pizzaToChange.Price = product.Price;
+            pizzaToChange.Novelty = product.Novelty;
+            pizzaToChange.Bestseller = product.Bestseller;
+            pizzaToChange.Discount = product.Discount;
             await _dbContext.SaveChangesAsync();
         }
         // Удаляет пиццу из базы данных.
         public async Task DeletePizzaAsync(int id)
         {
-            var pizzaToDelete = await _dbContext.Pizzas.Include(p => p.Image).
+            var pizzaToDelete = await _dbContext.Products.Include(p => p.Image).
                 FirstOrDefaultAsync(p => p.Id == id);
             // Удаляем саму пиццу из базы.
-            _dbContext.Pizzas.Remove(pizzaToDelete);
+            _dbContext.Products.Remove(pizzaToDelete);
             await _dbContext.SaveChangesAsync();
             // Логика для удаления лишних изображений.
-            var otherPizzas = await _dbContext.Pizzas.
+            var otherPizzas = await _dbContext.Products.
                 FirstOrDefaultAsync(p => p.Image.Id == pizzaToDelete.Image.Id);
             // Если изображение больше не используется
             // ни для какой пиццы, происходит удаление
@@ -84,7 +82,7 @@ namespace PizzaShopApplication.Models.Data.Domain
         // Проверяет, используется ли изображение 
         // для пицц в базе данных, и если нет - 
         // удаляет его из базы и из проекта.
-        public void CheckImageUsing(Pizza pizzaToDelete)
+        public void CheckImageUsing(Product pizzaToDelete)
         {
             File.Delete(string.Concat(_appEnvironment.WebRootPath,
                     pizzaToDelete.Image.Path, pizzaToDelete.Image.Name));

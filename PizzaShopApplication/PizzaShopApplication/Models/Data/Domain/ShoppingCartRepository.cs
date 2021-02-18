@@ -10,46 +10,53 @@ using System.Threading.Tasks;
 
 namespace PizzaShopApplication.Models.Data.Domain
 {
+    /// <summary>
+    /// This class represents the ability to use 
+    /// CRUD opertaions in "Carts" table in DB.
+    /// </summary>
     public class ShoppingCartRepository
     {
-        // Контекст БД.
-        private ApplicationDataContext dbContext;
+        private ApplicationDataContext _dbContext;
         private readonly IHttpContextAccessor _httpContextAccessor;
-        private UserCartInformer userCartInformer;
         public ShoppingCartRepository(ApplicationDataContext dbContext,
-            IHttpContextAccessor _httpContextAccessor, UserCartInformer userCartInformer)
+            IHttpContextAccessor httpContextAccessor)
         {
-            this.dbContext = dbContext;
-            this._httpContextAccessor = _httpContextAccessor;
-            this.userCartInformer = userCartInformer;
+            _dbContext = dbContext;
+            _httpContextAccessor = httpContextAccessor;
         }
-        // Ключ для кук.
+        /// <summary>
+        /// Cookie key for search user cart
+        /// </summary>
         public const string CookieKey = "CartId";
-        // Получает товары в корзине по её Guid-идентификатору.
+        /// <summary>
+        /// Gets user cart by cart GUID.
+        /// </summary>
+        /// <param name="id">Represents CartId(GUID), coming from Request.</param>
+        /// <returns>User cart</returns>
         public IEnumerable<Cart> GetConcreteCartAsync(string id)
         {
-            return dbContext.Carts.Include(s => s.Pizza).Where(s => s.UserId.ToString() == id);
+            return _dbContext.Carts.Include(s => s.Product).Where(s => s.UserId.ToString() == id);
         }
         public async Task AddToCartAsync(int id)
         {
             // Получение продукта из базы данных
             Guid ShoppingCartId = GetCartId();
-            var cartItem = await dbContext.Carts.SingleOrDefaultAsync(
-                c => c.UserId == ShoppingCartId && c.PizzaId == id);
+            var cartItem = await _dbContext.Carts.SingleOrDefaultAsync(
+                c => c.UserId == ShoppingCartId && c.ProductId == id);
             // Если такого товара еще нет в корзине, то создаем новый.
             if (cartItem == null)
             {
                 cartItem = new Cart
                 {
                     ItemId = Guid.NewGuid(),
-                    PizzaId = id,
+                    ProductId = id,
                     UserId = ShoppingCartId,
-                    Pizza = await dbContext.Pizzas.SingleOrDefaultAsync(
+                    Product = await _dbContext.Products.SingleOrDefaultAsync(
                         p => p.Id == id),
                     Quantity = 1,
                     DateCreated = DateTime.Now
                 };
-                await dbContext.Carts.AddAsync(cartItem);
+                await _dbContext.Carts.AddAsync(cartItem);
             }
             // В случае, если товар(в данном случае пицца)
             // уже есть в корзине, то увеличиваем количество 
@@ -58,15 +65,15 @@ namespace PizzaShopApplication.Models.Data.Domain
             {
                 cartItem.Quantity++;
             }
-            await dbContext.SaveChangesAsync();
+            await _dbContext.SaveChangesAsync();
         }
         public async Task DeleteFromCartAsync(int id)
         {
             // Получение продукта из базы данных
             Guid ShoppingCartId = GetCartId();
             //
-            var cartItem = await dbContext.Carts.SingleOrDefaultAsync(
-                c => c.UserId == ShoppingCartId && c.PizzaId == id);
+            var cartItem = await _dbContext.Carts.SingleOrDefaultAsync(
+                c => c.UserId == ShoppingCartId && c.ProductId == id);
             
             if (cartItem.Quantity > 1)
             {
@@ -76,9 +83,9 @@ namespace PizzaShopApplication.Models.Data.Domain
             // меньше одного - удаляем запись из БД.
             else
             {
-                dbContext.Remove(cartItem);
+                _dbContext.Remove(cartItem);
             }
-            await dbContext.SaveChangesAsync();
+            await _dbContext.SaveChangesAsync();
         }
         // Получение ключа из кук пользователя.
         public Guid GetCartId()
@@ -103,17 +110,17 @@ namespace PizzaShopApplication.Models.Data.Domain
         {
             var cartInformer = new List<UserCartInformer>();
             Guid ShoppingCartId = GetCartId();
-            var userCartItems = dbContext.Carts.Where(u => u.UserId == ShoppingCartId);
-            var tempPizzas = await dbContext.Pizzas.ToListAsync();
+            var userCartItems = _dbContext.Carts.Where(u => u.UserId == ShoppingCartId);
+            var tempPizzas = await _dbContext.Products.ToListAsync();
             foreach (var cartItem in userCartItems)
             {
                 // Наполняем вспомогательный объект 
                 // информацией о выбранном товаре
                 var tempoCart = new UserCartInformer();
                 tempoCart.PizzaCount = cartItem.Quantity;
-                tempoCart.PizzaName = tempPizzas.FirstOrDefault(p => p.Id == cartItem.PizzaId).Name;
-                tempoCart.PizzaPrice = tempPizzas.FirstOrDefault(p => p.Id == cartItem.PizzaId).Price;
-                tempoCart.PizzaId = tempPizzas.FirstOrDefault(p => p.Id == cartItem.PizzaId).Id;
+                tempoCart.PizzaName = tempPizzas.FirstOrDefault(p => p.Id == cartItem.ProductId).Name;
+                tempoCart.PizzaPrice = tempPizzas.FirstOrDefault(p => p.Id == cartItem.ProductId).Price;
+                tempoCart.PizzaId = tempPizzas.FirstOrDefault(p => p.Id == cartItem.ProductId).Id;
                 tempoCart.ShoppingCartId = ShoppingCartId.ToString();
                 cartInformer.Add(tempoCart);
             }

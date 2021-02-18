@@ -32,7 +32,7 @@ namespace PizzaShopApplication
         {
             services.AddSession();
             services.AddHttpContextAccessor();
-            services.AddTransient<ShowPizzaRepository>();
+            services.AddTransient<ShowProductRepository>();
             services.AddTransient<EditPizzaDataRepository>();
             services.AddTransient<ShoppingCartRepository>();
             services.AddTransient<UserCartInformer>();

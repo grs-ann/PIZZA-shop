@@ -12,21 +12,30 @@ using PizzaShopApplication.Models.Data;
 using PizzaShopApplication.Models.Data.Context;
 using PizzaShopApplication.Models.Data.Domain;
 using PizzaShopApplication.Models.Pagination;
+using PizzaShopApplication.Models.Secondary.Entities;
 
 namespace PizzaShopApplication.Controllers
 {
+    /// <summary>
+    /// This controller used for products presentation for buyers.
+    /// </summary>
     public class HomeController : Controller
     {
-        private readonly ShowPizzaRepository pizzaRepository;
-        public HomeController(ShowPizzaRepository pizzaRepository)
+        private readonly ShowProductRepository _showProductRepository;
+        public HomeController(ShowProductRepository showProductRepository)
         {
-            this.pizzaRepository = pizzaRepository;
+            _showProductRepository = showProductRepository;
         }
+        /// <summary>
+        /// Collects different products to one collection and gets it to View.
+        /// </summary>
         [HttpGet]
         public IActionResult Index()
         {
-            var pizzas = pizzaRepository.GetProductsFromDB();
-            return View(pizzas);
+            var pizzas = _showProductRepository.GetAllPizzasFromDB();
+            var drinks = _showProductRepository.GetAllDrinksFromDB();
+            var productViewModel = new ProductViewModel(pizzas, drinks);
+            return View(productViewModel);
         }
     }
 }

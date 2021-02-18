@@ -13,8 +13,4 @@
     <Resource Include="wwwroot\images\chicken.png" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="wwwroot\images\" />
-  </ItemGroup>
-
 </Project>

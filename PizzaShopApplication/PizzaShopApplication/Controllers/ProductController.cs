@@ -18,14 +18,14 @@ namespace PizzaShopApplication.Controllers
     public class ProductController : Controller
     {
         private readonly ApplicationDataContext _dbContext;
-        private readonly ShowPizzaRepository _showPizzaRepository;
+        private readonly ShowProductRepository _showProductRepository;
         private readonly EditPizzaDataRepository _editPizzaRepository;
         private readonly IWebHostEnvironment _appEnvironment;
-        public ProductController(ApplicationDataContext dbContext, ShowPizzaRepository showPizzaRepository, 
+        public ProductController(ApplicationDataContext dbContext, ShowProductRepository showProductRepository, 
             IWebHostEnvironment appEnvironment, EditPizzaDataRepository editPizzaRepository)
         {
             _dbContext = dbContext;
-            _showPizzaRepository = showPizzaRepository;
+            _showProductRepository = showProductRepository;
             _editPizzaRepository = editPizzaRepository;
             _appEnvironment = appEnvironment;
         }
@@ -33,13 +33,13 @@ namespace PizzaShopApplication.Controllers
         
         public IActionResult ChangeProducts()
         {
-            var pizzas = _showPizzaRepository.GetProductsFromDB();
+            var pizzas = _showProductRepository.GetAllProductsFromDB();
             return View(pizzas);
         }
         [HttpGet]
         public async Task<IActionResult> EditProduct(int itemId)
         {
-            var pizza = await _showPizzaRepository.GetProductFromDBAsync(itemId);
+            var pizza = await _showProductRepository.GetProductFromDBAsync(itemId);
             return View(pizza);
         }
         [HttpGet]
@@ -50,38 +50,38 @@ namespace PizzaShopApplication.Controllers
         }
         [HttpPost]
         // Добавление продукта в базу данных.
-        public async Task<IActionResult> AddProductToDB(Pizza pizza, IFormFile uploadedFile)
+        public async Task<IActionResult> AddProductToDB(Product product, IFormFile uploadedFile)
         {
             if (ModelState.IsValid)
             {
                 if (uploadedFile == null)
                 {
                     ModelState.AddModelError("", "Не загружено изображение");
-                    return View(pizza);
+                    return View(product);
                 }
                 var image = await AddImageFile(uploadedFile);
-                await _editPizzaRepository.AddNewPizzaAsync(pizza, image);
+                await _editPizzaRepository.AddNewPizzaAsync(product, image);
             }
             else
             {
                 ModelState.AddModelError("", "некорректные данные");
-                return View(pizza);
+                return View(product);
             }
             
             return RedirectPermanent("~/Product/ChangeProducts");
         }
         // Внесение изменений о товаре в базу данных.
         [HttpPost]
-        public async Task<IActionResult> EditProduct(Pizza pizza, int itemId, IFormFile uploadedFile)
+        public async Task<IActionResult> EditProduct(Product product, int itemId, IFormFile uploadedFile)
         {
             if (ModelState.IsValid)
             {
-                await _editPizzaRepository.EditPizzaAsync(pizza, itemId, uploadedFile);
+                await _editPizzaRepository.EditPizzaAsync(product, itemId, uploadedFile);
             }
             else
             {
                 ModelState.AddModelError("", "некорректно введены данные");
-                return View(pizza);
+                return View(product);
             }
             return RedirectPermanent("~/Product/ChangeProducts");
         }

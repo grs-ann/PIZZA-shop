@@ -18,7 +18,7 @@ namespace PizzaShopApplication.Models.Data.Entities.Data
         public int Quantity { get; set; }
         public DateTime DateCreated { get; set; }
         // Идентификатор продукта, находящегося в корзине.
-        public int PizzaId { get; set; }
-        public Pizza Pizza{ get; set; }
+        public int ProductId { get; set; }
+        public Product Product{ get; set; }
     }
 }

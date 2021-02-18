@@ -1,5 +1,5 @@
-﻿@using PizzaShopApplication.Models.Data; 
-@model IEnumerable<Pizza>
+﻿@using PizzaShopApplication.Models.Data.Entities.Data;
+@model IEnumerable<Product>
 @{ 
     ViewData["Title"] = "Редактирование товаров";
 }
@@ -11,7 +11,7 @@
             <th></th>
             <th></th>
         </tr>
-        @foreach (Pizza item in Model)
+        @foreach (var item in Model)
         {
             <tr>
                 <td>@item.Name</td>

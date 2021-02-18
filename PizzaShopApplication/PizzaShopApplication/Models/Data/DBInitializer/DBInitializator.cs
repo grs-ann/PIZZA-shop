@@ -27,30 +27,88 @@ namespace PizzaShopApplication.Models.Data.DBInitializer
                     {
                         Name = "chicken.png",
                         Path = "/images/"
+                    },
+                    new Image
+                    {
+                        Name = "bonaqua.png",
+                        Path = "/images/"
                     });
+                context.SaveChanges();
             }
-            if (!context.Pizzas.Any())
+            if (!context.ProductTypes.Any())
             {
-                context.Pizzas.AddRange(
-                    new Pizza
+                context.ProductTypes.AddRange(
+                    new ProductType
+                    {
+                        Name = "Пицца"
+                    },
+                    new ProductType
+                    {
+                        Name = "Напиток"
+                    });
+                context.SaveChanges();
+            }
+            if (!context.Products.Any())
+            {
+                context.Products.AddRange(
+                    new Product
                     {
                         Name = "4 сыра",
-                        Diameter = 33,
-                        Price = 289,
-                        Novelty = true,
-                        Bestseller = true,
+                        Price = 389,
+                        Novelty = false,
+                        Bestseller = false,
                         Discount = false,
-                        ImageId = 1
+                        ImageId = 1,
+                        ProductTypeId = 1,
+                        ProductPropertyId = 1
                     },
-                    new Pizza
+                    new Product
                     {
                         Name = "Куриная",
-                        Diameter = 33,
-                        Price = 300,
-                        Novelty = true,
-                        Bestseller = true,
+                        Price = 349,
+                        Novelty = false,
+                        Bestseller = false,
                         Discount = false,
-                        ImageId = 2
+                        ImageId = 2,
+                        ProductTypeId = 1,
+                        ProductPropertyId = 1
+                    },
+                    new Product
+                    {
+                        Name = "BonAqua",
+                        Price = 70,
+                        Novelty = false,
+                        Bestseller = false,
+                        Discount = false,
+                        ImageId = 3,
+                        ProductTypeId = 2
+                    });
+                context.SaveChanges();
+            }
+            if (!context.Properties.Any())
+            {
+                context.Properties.AddRange(
+                    new Property
+                    {
+                        ProductTypeId = 1,
+                        Name = "Ингредиенты",
+                    });
+                context.SaveChanges();
+            }
+            if (!context.ProductProperties.Any())
+            {
+                context.ProductProperties.AddRange(
+                    new ProductProperty
+                    {
+                        Value = "белый соус, курица, лук, моцарелла, орегано, томаты",
+                        ProductId = 2,
+                        PropertyId = 1
+                    },
+                    new ProductProperty
+                    {
+                        Value = "базилик, дорблю, моцарелла, пармезан, сливочный сыр, сырный соус",
+                        ProductId = 3,
+                        PropertyId = 1
                     });
             }
             if (!context.OrderStatuses.Any())
@@ -78,114 +136,6 @@ namespace PizzaShopApplication.Models.Data.DBInitializer
                         Status = "Заказ отменён"
                     });
             }
-            
-            if (!context.Ingredients.Any())
-            {
-                context.Ingredients.AddRange(
-                    new Ingredient
-                    {
-                        Name = "Помидоры"
-                    },
-                    new Ingredient
-                    {
-                        Name = "Огурцы"
-                    },
-                    new Ingredient
-                    {
-                        Name = "Сыр пармезан"
-                    },
-                    new Ingredient
-                    {
-                        Name = "Сыр чеддер"
-                    },
-                    new Ingredient
-                    {
-                        Name = "Сыр сулугуни"
-                    },
-                    new Ingredient
-                    {
-                        Name = "Сыр брынза"
-                    },
-                    new Ingredient
-                    {
-                        Name = "Тонкое тесто"
-                    },
-                    new Ingredient
-                    {
-                        Name = "Сыр моцарелла"
-                    },
-                    new Ingredient
-                    {
-                        Name = "Лук"
-                    },
-                    new Ingredient
-                    {
-                        Name = "Курица"
-                    },
-                    new Ingredient
-                    {
-                        Name = "Томаты"
-                    });
-            }
-            if (!context.Recepts.Any())
-            {
-                context.Recepts.AddRange(
-                    new Recept
-                    {
-                        PizzaId = 1,
-                        IngridientId = 3
-                    },
-                    new Recept
-                    {
-                        PizzaId = 1,
-                        IngridientId = 4
-                    },
-                    new Recept
-                    {
-                        PizzaId = 1,
-                        IngridientId = 5
-                    },
-                    new Recept
-                    {
-                        PizzaId = 1,
-                        IngridientId = 6
-                    },
-                    new Recept
-                    {
-                        PizzaId = 1,
-                        IngridientId = 2
-                    },
-                    new Recept
-                    {
-                        PizzaId = 1,
-                        IngridientId = 7
-                    },
-                    new Recept
-                    {
-                        PizzaId = 2,
-                        IngridientId = 7
-                    },
-                    new Recept
-                    {
-                        PizzaId = 2,
-                        IngridientId = 8
-                    },
-                    new Recept
-                    {
-                        PizzaId = 2,
-                        IngridientId = 9
-                    },
-                    new Recept
-                    {
-                        PizzaId = 2,
-                        IngridientId = 10
-                    },
-                    new Recept
-                    {
-                        PizzaId = 2,
-                        IngridientId = 11
-                    });
-            }
             context.SaveChanges();
             if (!context.Carts.Any())
             {
@@ -197,7 +147,7 @@ namespace PizzaShopApplication.Models.Data.DBInitializer
                         UserId = Guid.NewGuid(),
                         Quantity = random.Next(1, 3),
                         DateCreated = DateTime.UtcNow,
-                        Pizza = context.Pizzas.FirstOrDefault(),
+                        Product = context.Products.FirstOrDefault(),
                     };
                     randomGuids[i] = cart.UserId;
                     context.Carts.Add(cart);
