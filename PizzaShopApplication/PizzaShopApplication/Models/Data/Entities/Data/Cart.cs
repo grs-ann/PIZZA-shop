@@ -8,16 +8,17 @@ using System.Threading.Tasks;
 
 namespace PizzaShopApplication.Models.Data.Entities.Data
 {
+    /// <summary>
+    /// Represents user cart entity.
+    /// </summary>
     public class Cart
     {
         [Key]
         public Guid ItemId { get; set; }
-        // Id пользователя, связанного с приобретаемым элементом.
-        // Будет храниться как переменная сеанса.
+        // Unique user Id, stored in cookies.
         public Guid UserId { get; set; }
         public int Quantity { get; set; }
         public DateTime DateCreated { get; set; }
-        // Идентификатор продукта, находящегося в корзине.
         public int ProductId { get; set; }
         public Product Product{ get; set; }
     }

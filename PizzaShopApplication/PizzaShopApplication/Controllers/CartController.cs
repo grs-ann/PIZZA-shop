@@ -10,14 +10,14 @@ using PizzaShopApplication.Models.Secondary.Entities;
 namespace PizzaShopApplication.Controllers
 {
     /// <summary>
-    /// This controller provides the ability to manage a basket of orders. 
+    /// This controller provides the ability to manage a cart of orders. 
     /// </summary>
     public class CartController : Controller
     {
-        private readonly ShoppingCartRepository cart;
-        public CartController(ShoppingCartRepository cart)
+        private readonly ShoppingCartRepository _shoppingCartRepository;
+        public CartController(ShoppingCartRepository shoppingCartRepository)
         {
-            this.cart = cart;
+            _shoppingCartRepository = shoppingCartRepository;
         }
         /// <summary>
         /// Adds a new product to cart
@@ -26,7 +26,7 @@ namespace PizzaShopApplication.Controllers
         /// <param name="itemName">Product name</param>
         public async Task<IActionResult> AddItemToCart(int itemId, string itemName)
         {
-            await cart.AddToCartAsync(itemId);
+            await _shoppingCartRepository.AddToCartAsync(itemId);
             ViewBag.Name = itemName;
             return View();
         }
@@ -36,7 +36,7 @@ namespace PizzaShopApplication.Controllers
         /// <param name="itemId">Product Id in database table named "Products"</param>
         public async Task<IActionResult> AddItemToCartChangeEvent(int itemId)
         {
-            await cart.AddToCartAsync(itemId);
+            await _shoppingCartRepository.AddToCartAsync(itemId);
             return RedirectPermanent("~/Cart/GetUserCartInfo");
         }
         /// <summary>
@@ -45,27 +45,28 @@ namespace PizzaShopApplication.Controllers
         /// <param name="itemId">Product Id in database table named "Products"</param>
         public async Task<IActionResult> DeleteItemFromCart(int itemId)
         {
-            await cart.DeleteFromCartAsync(itemId);
+            await _shoppingCartRepository.DeleteFromCartAsync(itemId);
             return RedirectPermanent("~/Cart/GetUserCartInfo");
         }
         /// <summary>
         /// Gets user's cart with all ordered products.
         /// </summary>
-        public async Task<IActionResult> GetUserCartInfo()
+        public IActionResult GetUserCartInfo()
         {
-            var cartItems = await cart.GetCartItemsAsync();
+            //var cartItems = await cart.GetCartItemsAsync();
+            var cart = _shoppingCartRepository.GetCartItems();
             decimal totalSum = 0;
-            foreach (var cartItem in cartItems)
+            foreach (var cartItem in cart)
             {
-                var counter = cartItem.PizzaCount;
+                var counter = cartItem.Quantity;
                 while (counter > 0)
                 {
-                    totalSum += cartItem.PizzaPrice;
+                    totalSum += cartItem.Product.Price;
                     counter--;
                 }
             }
             ViewBag.TotalSum = totalSum;
-            return View(cartItems);
+            return View(cart);
         }
     }
 }

@@ -7,9 +7,17 @@ using System.Threading.Tasks;
 
 namespace PizzaShopApplication.Models.Secondary
 {
+    /// <summary>
+    /// This class helps to work with project folders and files.
+    /// </summary>
     public static class FoldersManipulator
     {
-        // Проверяет, существует ли файл в директории.
+        /// <summary>
+        /// Checks if the file exists in the directory, 
+        /// and if so, adds a unique postfix to the name. 
+        /// </summary>
+        /// <param name="filePath">File save path</param>
+        /// <returns>Unique file save path</returns>
         public static string GetUniqueFilePath(string filePath)
         {
             if (File.Exists(filePath))

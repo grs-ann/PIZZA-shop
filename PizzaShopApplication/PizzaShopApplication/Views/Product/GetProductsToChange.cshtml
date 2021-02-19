@@ -1,0 +1,62 @@
+﻿@using PizzaShopApplication.Models.Data.Entities.Data;
+@model IEnumerable<Product>
+@{ 
+    ViewData["Title"] = "Редактирование товаров";
+}
+<div>
+    <h1 align="left">Изменение информации о товарах</h1>
+    <table>
+        <tr>
+            <th>Наименование товара</th>
+            <th></th>
+            <th></th>
+        </tr>
+        @foreach (var item in Model)
+        {
+            @*If product is a pizza.*@
+            if (item.ProductTypeId == 1)
+            {
+                <tr>
+                    <td>@item.Name</td>
+                    <td>
+                        <form method="get" action="/Product/EditPizza">
+                            <input hidden type="text" name="itemId" value="@item.Id" />
+                            <input type="submit" class="btn btn-default" value="Редактировать" />
+                        </form>
+                    </td>
+                    <td>
+                        <form method="post" action="/Product/DeleteFromDB">
+                            <input hidden type="text" name="itemId" value="@item.Id" />
+                            <input type="submit" class="btn btn-default" value="Удалить" />
+                        </form>
+                    </td>
+                </tr>
+            }
+            @*If product is a drink.*@
+            else if (item.ProductTypeId == 2)
+            {
+                <tr>
+                    <td>@item.Name</td>
+                    <td>
+                        <form method="get" action="/Product/EditDrink">
+                            <input hidden type="text" name="itemId" value="@item.Id" />
+                            <input type="submit" class="btn btn-default" value="Редактировать" />
+                        </form>
+                    </td>
+                    <td>
+                        <form method="post" action="/Product/DeleteFromDB">
+                            <input hidden type="text" name="itemId" value="@item.Id" />
+                            <input type="submit" class="btn btn-default" value="Удалить" />
+                        </form>
+                    </td>
+                </tr>
+            }
+        }
+    </table>
+    <form method="get" action="/Product/AddPizza">
+        <input type="submit" class="btn btn-primary" value="Добавить новую пиццу" />
+    </form>
+    <form method="get" action="/Product/AddDrink">
+        <input type="submit" class="btn btn-primary" value="Добавить новый напиток" />
+    </form>
+</div>

@@ -7,15 +7,20 @@ using System.Threading.Tasks;
 
 namespace PizzaShopApplication.Models.Data.Entities.Data
 {
+    /// <summary>
+    /// Represents database table,
+    /// contained different property values 
+    /// for products.
+    /// </summary>
     public class ProductProperty
     {
         public int Id { get; set; }
         public int ProductId { get; set; }
         public int PropertyId { get; set; }
         public string Value { get; set; }
-        // Ссылка на продукт.
+        // Link to Product table.
         public Product Product { get; set; }
-        // Ссылка на свойство.
+        // Link to Property table.
         public Property Property { get; set; }
     }
 }

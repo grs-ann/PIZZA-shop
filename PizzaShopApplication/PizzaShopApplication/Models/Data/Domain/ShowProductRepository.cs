@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Hosting;
 using PizzaShopApplication.Models.Data.Entities.Data;
 using PizzaShopApplication.Models.Data.Domain.Interfaces;
 using System.Linq;
+using PizzaShopApplication.Models.Secondary.Entities;
 
 namespace PizzaShopApplication.Models.Data.Domain
 {
@@ -28,10 +29,51 @@ namespace PizzaShopApplication.Models.Data.Domain
         /// </summary>
         /// <param name="id">Unique product identificator in DB table</param>
         /// <returns>Product</returns>
-        public async Task<Product> GetProductFromDBAsync(int id)
+        public Product GetProductFromDB(int id)
         {
-            var product = await _dbContext.Products.FirstOrDefaultAsync(p => p.Id == id);
+            var product = _dbContext.Products.Include(p => p.ProductProperties).FirstOrDefaultAsync(p => p.Id == id).Result;
             return product;
+        }
+        /// <summary>
+        /// Gets a product with pizza type, and fills
+        /// the PizzaViewModel with this data.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>PizzaViewModel</returns>
+        public PizzaViewModel GetPizzaViewModel(int id)
+        {
+            var product = _dbContext.Products.Include(p => p.ProductProperties).FirstOrDefaultAsync(p => p.Id == id).Result;
+            var pizzaViewModel = new PizzaViewModel
+            {
+                Id = product.Id,
+                Name = product.Name,
+                Price = product.Price,
+                Bestseller = product.Bestseller,
+                Discount = product.Discount,
+                Novelty = product.Novelty,
+                PizzaIngridients = product.ProductProperties.FirstOrDefault(p => p.Id == product.Id).Value
+            };
+            return pizzaViewModel;
+        }
+        /// <summary>
+        /// Gets a product with drink type, and fills
+        /// the DrinkViewModel with this data.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>DrinkViewModel</returns>
+        public DrinkViewModel GetDrinkViewModel(int id)
+        {
+            var product = _dbContext.Products.Include(p => p.ProductProperties).FirstOrDefaultAsync(p => p.Id == id).Result;
+            var drinkViewModel = new DrinkViewModel
+            {
+                Id = product.Id,
+                Name = product.Name,
+                Price = product.Price,
+                Bestseller = product.Bestseller,
+                Discount = product.Discount,
+                Novelty = product.Novelty
+            };
+            return drinkViewModel;
         }
         /// <summary>
         /// Getting a enumerable of all products

@@ -6,6 +6,10 @@ using System.Threading.Tasks;
 
 namespace PizzaShopApplication.Models.Data.Entities.Data
 {
+    /// <summary>
+    /// Represents database table, contained
+    /// different order statuses.
+    /// </summary>
     public class OrderStatus
     {
         [Key]

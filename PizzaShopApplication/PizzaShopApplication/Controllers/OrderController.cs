@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PizzaShopApplication.Models.Data.Context;
+using PizzaShopApplication.Models.Data.Domain;
 using PizzaShopApplication.Models.Data.Domain.Interfaces;
 using PizzaShopApplication.Models.Data.Entities.Data;
 using PizzaShopApplication.Models.Filtration;
@@ -13,22 +14,39 @@ using System.Threading.Tasks;
 
 namespace PizzaShopApplication.Controllers
 {
+    /// <summary>
+    /// This controller provides the ability to orders management.
+    /// </summary>
     public class OrderController : Controller
     {
         private readonly IOrder _orderRepository;
+        private readonly ShoppingCartRepository _shoppingCartRepository;
         private readonly ApplicationDataContext _dbContext;
-        public OrderController(IOrder orderRepository, ApplicationDataContext dbContext)
+        public OrderController(IOrder orderRepository, ApplicationDataContext dbContext,
+                               ShoppingCartRepository shoppingCartRepository)
         {
-            _orderRepository = orderRepository;
             _dbContext = dbContext;
+            _orderRepository = orderRepository;
+            _shoppingCartRepository = shoppingCartRepository;
         }
+        /// <summary>
+        /// Gets cart products to View and provides
+        /// possibility to SET a new order.
+        /// </summary>
+        /// <param name="totalSum">Total price of order</param>
         [HttpGet]
-        public IActionResult SetOrder(string totalSum, List<UserCartInformer> userCart)
+        public IActionResult SetOrder(string totalSum)
         {
-            ViewBag.userCart = userCart;
+            ViewBag.userCart = _shoppingCartRepository.GetCartItems();
             ViewBag.totalSum = totalSum;
             return View();
         }
+        /// <summary>
+        /// Add a new order in database and 
+        /// informs user about his order.
+        /// </summary>
+        /// <param name="order"></param>
+        /// <returns></returns>
         [HttpPost]
         public async Task<IActionResult> SetOrder(Order order)
         {

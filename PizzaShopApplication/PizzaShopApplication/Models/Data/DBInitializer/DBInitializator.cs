@@ -9,10 +9,17 @@ using System.Threading.Tasks;
 
 namespace PizzaShopApplication.Models.Data.DBInitializer
 {
+    /// <summary>
+    /// This class helps fill the database with initial data.
+    /// </summary>
     public static class DBInitializator
     {
         private static Guid[] randomGuids = new Guid[20];
-        // При пустой БД заполняет таблицы тестовыми начальными данными.
+        /// <summary>
+        /// Initializes the database tables with start data
+        /// for comfortable project development.
+        /// </summary>
+        /// <param name="context"></param>
         public static void Initialize(ApplicationDataContext context)
         {
             if (!context.Images.Any())
@@ -114,21 +121,21 @@ namespace PizzaShopApplication.Models.Data.DBInitializer
             if (!context.OrderStatuses.Any())
             {
                 context.OrderStatuses.AddRange(
-                    // Заказ в процессе доставки.
+                    // Order in a delivery process.
                     new OrderStatus
                     {
                         InProcess = true,
                         Cancelled = false,
                         Status = "В процессе доставки"
                     },
-                    // Заказ доставлен.
+                    // Order is a deliveried.
                     new OrderStatus
                     {
                         InProcess = false,
                         Cancelled = false,
                         Status = "Заказ доставлен"
                     },
-                    // Заказ отменён.
+                    // Order is a cancelled.
                     new OrderStatus
                     {
                         InProcess = false,
@@ -429,12 +436,17 @@ namespace PizzaShopApplication.Models.Data.DBInitializer
 
             context.SaveChanges();
         }
-        // Генерариует случайную дату в указанном временном диапазоне.
+        /// <summary>
+        /// Generates random datetime in the specified range.
+        /// </summary>
+        /// <param name="from">Minimum datetime limit.</param>
+        /// <param name="to">Maximum datetime limit.</param>
+        /// <returns>DateTime</returns>
         public static DateTime GetRandomDateTime(DateTime from, DateTime to)
         {
             if (from >= to)
             {
-                throw new Exception("Параметр \"from\" должен быть меньше параметра \"to\"!");
+                throw new Exception("\"from\" parameter must be less then \"to\" parameter!");
             }
             var random = new Random();
             TimeSpan range = to - from;

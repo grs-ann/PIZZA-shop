@@ -32,10 +32,9 @@ namespace PizzaShopApplication
         {
             services.AddSession();
             services.AddHttpContextAccessor();
-            services.AddTransient<ShowProductRepository>();
-            services.AddTransient<EditPizzaDataRepository>();
+            services.AddTransient<IProduct, ShowProductRepository>();
+            services.AddTransient<EditProductDataRepository>();
             services.AddTransient<ShoppingCartRepository>();
-            services.AddTransient<UserCartInformer>();
             services.AddTransient<IOrder, OrderRepository>();
             services.AddSingleton<IPasswordHasher, PasswordHasher>();
             string connection = Configuration.GetConnectionString("DefaultConnection");

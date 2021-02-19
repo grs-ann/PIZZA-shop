@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace PizzaShopApplication.Models.Data.Entities.Data
 {
+    /// <summary>
+    /// Represents image entity.
+    /// </summary>
     public class Image
     {
         [Key]

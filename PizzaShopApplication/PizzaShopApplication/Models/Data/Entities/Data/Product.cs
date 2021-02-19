@@ -7,6 +7,9 @@ using System.Threading.Tasks;
 
 namespace PizzaShopApplication.Models.Data.Entities.Data
 {
+    /// <summary>
+    /// Represents product entity.
+    /// </summary>
     public class Product
     {
         [ForeignKey("ProductProperty")]
@@ -17,19 +20,16 @@ namespace PizzaShopApplication.Models.Data.Entities.Data
         [Required(ErrorMessage = "Не указана стоимость")]
         [Range(0, 2000000, ErrorMessage = "Недопустимое значение стоимости")]
         public decimal Price { get; set; }
-        // Является ли пицца новинкой.
         public bool Novelty { get; set; }
-        // Является ли пицца хитом продаж.
         public bool Bestseller { get; set; }
-        // Предоставлять ли на пиццу скидку.
         public bool Discount { get; set; }
-        // Связь через FK с таблицей ProductType.
+        // Link to ProductType table.
         public ProductType ProductType { get; set; }
         public int ProductTypeId { get; set; }
-        // Связь через FK с таблицей Image.
+        // Link to Image table.
         public Image Image { get; set; }
         public int ImageId { get; set; }
-        // Связь с таблицей ProductProperty(навигационное свойство).
+        // Link to ProductProperties table(navigation property).
         public virtual List<ProductProperty> ProductProperties { get; set; }
         public int ProductPropertyId { get; set; }
     }

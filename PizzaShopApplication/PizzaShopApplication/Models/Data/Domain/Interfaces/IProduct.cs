@@ -1,4 +1,5 @@
 ﻿using PizzaShopApplication.Models.Data.Entities.Data;
+using PizzaShopApplication.Models.Secondary.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,16 +9,16 @@ namespace PizzaShopApplication.Models.Data.Domain.Interfaces
 {
     /// <summary>
     /// This interface defines base methods, which
-    /// that should be in his class-inheritor for
+    /// that should be in class-inheritor for
     /// getting a products from database.
     /// </summary>
-    interface IProduct
+    public interface IProduct
     {
-        // Получает продукт из базы данных по Id.
-        public Task<Product> GetProductFromDBAsync(int id);
-        // Получает перечисление всех продуктов из базы данных.
+        public Product GetProductFromDB(int id);
         public IEnumerable<Product> GetAllProductsFromDB();
         public IEnumerable<Product> GetAllPizzasFromDB();
         public IEnumerable<Product> GetAllDrinksFromDB();
+        public PizzaViewModel GetPizzaViewModel(int id);
+        public DrinkViewModel GetDrinkViewModel(int id);
     }
 }

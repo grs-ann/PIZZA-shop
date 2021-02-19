@@ -5,36 +5,43 @@
 <form asp-action="EditProduct" asp-controller="Product" asp-anti-forgery="true" enctype="multipart/form-data"> 
     <div class="validation" asp-validation-summary="All"></div>
     <div>
-        <div class="form-group">
-            <input type="file" name="uploadedFile" />
-        </div>
-        <div class="form-group">
-            <label asp-for="Name">Наименование</label>
-            <input type="text" asp-for="Name" />
-        </div>
-        <div class="form-group">
-            <label asp-for="Price">Цена</label>
-            <input type="text" asp-for="Price" />
-        </div>
-        @*<div class="form-group">
-            <label asp-for="Diameter">Диаметр пиццы</label>
-            <input type="number" asp-for="Diameter" />
-        </div>*@
-        <div class="form-group">
-            <label asp-for="Novelty">Новинка</label>
-            <input type="checkbox" asp-for="Novelty" />
-        </div>
-        <div class="form-group">
-            <label asp-for="Bestseller">Хит</label>
-            <input type="checkbox" asp-for="Bestseller" />
-        </div>
-        <div class="form-group">
-            <label asp-for="Discount">Скидка</label>
-            <input type="checkbox" asp-for="Discount" />
-        </div>
-        <div class="form-group">
-            <input hidden type="number" name="itemId" asp-for="Id" />
-            <input type="submit" value="Подтвердить изменения" class="btn btn-outline-dark" />
-        </div>
+        @*In case, if product to changed is a pizza.*@
+        @if (Model.ProductTypeId == 1)
+        {
+            <h1>Изменение пиццы</h1>
+            <div class="form-group">
+                <input type="file" name="uploadedFile" />
+            </div>
+            <div class="form-group">
+                <label asp-for="Name">Наименование</label>
+                <input type="text" asp-for="Name" />
+            </div>
+            <div class="form-group">
+                <label asp-for="Price">Цена</label>
+                <input type="text" asp-for="Price" />
+            </div>
+            <div class="form-group">
+                <label asp-for="Novelty">Новинка</label>
+                <input type="checkbox" asp-for="Novelty" />
+            </div>
+            <div class="form-group">
+                <label asp-for="Bestseller">Хит</label>
+                <input type="checkbox" asp-for="Bestseller" />
+            </div>
+            <div class="form-group">
+                <label asp-for="Discount">Скидка</label>
+                <input type="checkbox" asp-for="Discount" />
+            </div>
+            <div class="form-group">
+                <input hidden type="number" name="itemId" asp-for="Id" />
+                <input type="text" name="productProperty" />
+                <input formmethod="post" type="submit" value="Подтвердить изменения" class="btn btn-outline-dark" />
+            </div>
+        }
+        @*In case, if product to changed is a drink.*@
+        @if (Model.ProductTypeId == 2)
+        {
+            <h1>Изменение напитка</h1>
+        }
     </div>
 </form>

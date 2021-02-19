@@ -7,6 +7,11 @@ using System.Threading.Tasks;
 
 namespace PizzaShopApplication.Models.Data.Domain.Interfaces
 {
+    /// <summary>
+    /// This interface defines base methods, which
+    /// that should be in class-inheritor for
+    /// work with contained in database table.
+    /// </summary>
     public interface IOrder
     {
         public Task AddOrderToDBAsync(Order order);
@@ -16,6 +21,5 @@ namespace PizzaShopApplication.Models.Data.Domain.Interfaces
         public List<Order> GetOrdersWithFiltration(int? orderStatusId, int? orderId, DateTime date);
         public IEnumerable<Cart> GetConcreteCartFromOrder(string id);
         public IEnumerable<OrderStatus> GetOrderStatuses();
-
     }
 }

@@ -11,12 +11,12 @@
         <th>Количество</th>
         <th>Цена(за шт.)</th>
     </tr>
-    @foreach (UserCartInformer item in ViewBag.userCart)
+    @foreach (var item in ViewBag.userCart)
     {
         <tr>
-            <td>@item.PizzaName</td>
-            <td>@item.PizzaCount</td>
-            <td>@item.PizzaPrice</td>
+            <td>@item.Product.Name</td>
+            <td>@item.Quantity</td>
+            <td>@item.Product.Price</td>
         </tr>
     }
 </table>

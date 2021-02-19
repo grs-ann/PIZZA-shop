@@ -1,0 +1,38 @@
+﻿@using PizzaShopApplication.Models.Secondary.Entities
+@model DrinkViewModel
+<h3>Изменение напитка</h3>
+
+<form asp-action="EditDrink" asp-controller="Product" asp-anti-forgery="true" enctype="multipart/form-data">
+    <div class="validation" asp-validation-summary="All"></div>
+    <div>
+        <div class="form-group">
+            <input type="file" name="uploadedFile" />
+        </div>
+        <div class="form-group">
+            <input type="hidden" asp-for="Id" />
+        </div>
+        <div class="form-group">
+            <label asp-for="Name">Наименование</label>
+            <input type="text" asp-for="Name" />
+        </div>
+        <div class="form-group">
+            <label asp-for="Price">Цена</label>
+            <input type="text" asp-for="Price" />
+        </div>
+        <div class="form-group">
+            <label asp-for="Novelty">Новинка</label>
+            <input type="checkbox" asp-for="Novelty" />
+        </div>
+        <div class="form-group">
+            <label asp-for="Bestseller">Хит</label>
+            <input type="checkbox" asp-for="Bestseller" />
+        </div>
+        <div class="form-group">
+            <label asp-for="Discount">Скидка</label>
+            <input type="checkbox" asp-for="Discount" />
+        </div>
+        <div class="form-group">
+            <input formmethod="post" type="submit" value="Подтвердить изменения" class="btn btn-outline-dark" />
+        </div>
+    </div>
+</form>

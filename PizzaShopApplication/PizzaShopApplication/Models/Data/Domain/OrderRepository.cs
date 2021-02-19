@@ -13,6 +13,10 @@ using System.Threading.Tasks;
 
 namespace PizzaShopApplication.Models.Data.Domain
 {
+    /// <summary>
+    /// This class represents the ability to use 
+    /// CRUD opertaions in "Orders" table in DB.
+    /// </summary>
     public class OrderRepository : IOrder
     {
         private readonly ApplicationDataContext _dbContext;
@@ -43,16 +47,6 @@ namespace PizzaShopApplication.Models.Data.Domain
             {
                 orders = orders.Where(o => o.OrderDateTime.Date == date.Date).ToList();
             }
-            /*var orderStatuses = await _dbContext.OrderStatuses.ToListAsync();
-            orderStatuses.Insert(0, new OrderStatus { Id = 0, Status = "Все" });
-            OrderListViewModel viewModel = new OrderListViewModel
-            {
-                Orders = orders,
-                Date = date,
-                OrderId = orderId,
-                OrderStatuses = new SelectList(orderStatuses, "Id", "Status")
-            };
-            return viewModel;*/
             return orders;
         }
         // Добавляет заказ в базу данных.
@@ -66,7 +60,11 @@ namespace PizzaShopApplication.Models.Data.Domain
             _dbContext.Orders.Add(order);
             await _dbContext.SaveChangesAsync();
         }
-        // Получает заказ, сохраненный в базе данных по обьекту.
+        /// <summary>
+        /// Gets a order contains in database.
+        /// </summary>
+        /// <param name="order"></param>
+        /// <returns></returns>
         public async Task<Order> GetOrderFromDBAsync(Order order)
         {
             order = await _dbContext.Orders.FirstOrDefaultAsync(o => o.OrderDateTime == order.OrderDateTime && o.Phone == order.Phone);
@@ -87,7 +85,6 @@ namespace PizzaShopApplication.Models.Data.Domain
         {
             return _dbContext.OrderStatuses;
         }
-
         public async Task ChangeOrderStatusAsync(int orderId, int orderStatusId)
         {
             var orderToChange = _dbContext.Orders.FirstOrDefaultAsync(o => o.Id == orderId).Result;

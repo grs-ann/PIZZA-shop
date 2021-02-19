@@ -49,7 +49,7 @@
                         @if (User.IsInRole("admin"))
                         {
                             <li>
-                                <a class="nav-link text-dark" asp-controller="Product" asp-action="ChangeProducts">Редактировать товары</a>
+                                <a class="nav-link text-dark" asp-controller="Product" asp-action="GetProductsToChange">Редактировать товары</a>
                             </li>
                         }
                         @if (User.IsInRole("admin") || User.IsInRole("dispatcher"))

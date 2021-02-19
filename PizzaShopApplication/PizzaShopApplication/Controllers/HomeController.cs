@@ -11,6 +11,7 @@ using PizzaShopApplication.Models;
 using PizzaShopApplication.Models.Data;
 using PizzaShopApplication.Models.Data.Context;
 using PizzaShopApplication.Models.Data.Domain;
+using PizzaShopApplication.Models.Data.Domain.Interfaces;
 using PizzaShopApplication.Models.Pagination;
 using PizzaShopApplication.Models.Secondary.Entities;
 
@@ -21,8 +22,8 @@ namespace PizzaShopApplication.Controllers
     /// </summary>
     public class HomeController : Controller
     {
-        private readonly ShowProductRepository _showProductRepository;
-        public HomeController(ShowProductRepository showProductRepository)
+        private readonly IProduct _showProductRepository;
+        public HomeController(IProduct showProductRepository)
         {
             _showProductRepository = showProductRepository;
         }
