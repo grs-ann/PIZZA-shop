@@ -45,8 +45,7 @@ namespace PizzaShopApplication.Controllers
         /// Add a new order in database and 
         /// informs user about his order.
         /// </summary>
-        /// <param name="order"></param>
-        /// <returns></returns>
+        /// <param name="order">User order with data.</param>
         [HttpPost]
         public async Task<IActionResult> SetOrder(Order order)
         {
@@ -56,20 +55,26 @@ namespace PizzaShopApplication.Controllers
                 $"для уточнения заказа.\nЕсли этого не произошло, позвоните нам по номеру: 8-846-322." +
                 $"\nВаш номер заказа: {order.Id}");
         }
+        /// <summary>
+        /// Gets all orders from database "Orders" table.
+        /// </summary>
+        /// <param name="orderStatusId">Type of order status for filtering by it.</param>
+        /// <param name="orderId">Order Id for filtering by it.</param>
+        /// <param name="date">Datetime value for filtering by it.</param>
+        /// <param name="page">Page number for pagination.</param>
         [HttpGet]
         [Authorize(Roles = "admin, dispatcher")]
         public IActionResult GetOrders(int? orderStatusId, int? orderId, DateTime date, int page = 1)
         {
-            // Получаем отфильтрованные данные.
-            var filteredOrders = _orderRepository.GetOrdersWithFiltration(orderStatusId, orderId, date);
-            // Для пагинации.
+            // Getting a filtered data(ordered by descending).
+            var filteredOrders = _orderRepository.GetOrdersWithFiltration(orderStatusId, orderId, date)
+                .OrderByDescending(o => o.Id).ToList();
+            // Max rows number at page.
             int pageSize = 10;
             var count = filteredOrders.Count();
             var items = filteredOrders.Skip((page - 1) * pageSize)
                 .Take(pageSize)
                 .ToList();
-            // Создаем новый обьект indexViewModel,
-            // чтобы отдать его во View.
             IndexViewModel indexViewModel = new IndexViewModel
             {
                 PageViewModel = new PageViewModel(count, page, pageSize),
@@ -78,8 +83,12 @@ namespace PizzaShopApplication.Controllers
             };
             return View(indexViewModel);
         }
-        // Получает заказ по его Id. В заказе отображается информация 
-        // по заказанным товарам, а так же информация о заказчике.
+        /// <summary>
+        /// Gets order by his Id and gets order cart items for
+        /// gives it to View.
+        /// </summary>
+        /// <param name="userCartId">User cart Id(GUID from Cookies).</param>
+        /// <param name="orderId">Order Id.</param>
         [HttpGet]
         [Authorize(Roles = "admin, dispatcher")]
         public IActionResult GetConcreteOrder(string userCartId, int orderId)
@@ -87,16 +96,24 @@ namespace PizzaShopApplication.Controllers
             var order  = _orderRepository.GetOrderFromDBAsync(orderId).Result;
             ViewBag.OrderStatus = _orderRepository.GetOrderStatuses();
             ViewBag.Order = order;
-            // Получение корзины заказчика.
+            // Getting user cart.
             var cartItems = _orderRepository.GetConcreteCartFromOrder(userCartId);
             return View(cartItems);
         }
-        // Изменяет статус заказа.
+        /// <summary>
+        /// Changes order status.
+        /// </summary>
+        /// <param name="orderId">Order Id.</param>
+        /// <param name="statusId">Order status Id.</param>
+        /// <param name="cartUserId">User cart Id(GUID from Cookies).</param>
         [HttpPost]
         [Authorize(Roles = "admin, dispatcher")]
         public async Task<IActionResult> GetConcreteOrder(int orderId, int statusId, Guid cartUserId)
         {
-            await _orderRepository.ChangeOrderStatusAsync(orderId, statusId);
+            if (statusId != 0)
+            {
+                await _orderRepository.ChangeOrderStatusAsync(orderId, statusId);
+            }
             ViewBag.OrderStatus = _orderRepository.GetOrderStatuses();
             ViewBag.Order = await _orderRepository.GetOrderFromDBAsync(orderId);
             var cartItems = _orderRepository.GetConcreteCartFromOrder(cartUserId.ToString());

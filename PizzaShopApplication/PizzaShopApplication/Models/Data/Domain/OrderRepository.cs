@@ -29,7 +29,13 @@ namespace PizzaShopApplication.Models.Data.Domain
             _httpContext = httpContext;
             _cartRepository = cartRepository;
         }
-        // Получает список заказов с встроенной системой фильтрации.
+        /// <summary>
+        /// Gets filtered order list.
+        /// </summary>
+        /// <param name="orderStatusId">Order status Id.</param>
+        /// <param name="orderId">Order Id.</param>
+        /// <param name="date">DateTime for filtering by it. </param>
+        /// <returns></returns>
         public List<Order> GetOrdersWithFiltration(int? orderStatusId, int? orderId, DateTime date)
         {
             var orders = _dbContext.Orders.Include(o => o.OrderStatus).ToListAsync().Result;
@@ -41,19 +47,23 @@ namespace PizzaShopApplication.Models.Data.Domain
             {
                 orders = orders.Where(o => o.Id == orderId).ToList();
             }
-            // В случае, если поле во View будет не заполнено,
-            // то значение даты будет эквивалентно DateTime.MinValue.
+            // If DateTime field in View is not filled,
+            // datetime must be equal DateTime.MinValue.
             if (date != null && date != DateTime.MinValue)
             {
                 orders = orders.Where(o => o.OrderDateTime.Date == date.Date).ToList();
             }
             return orders;
         }
-        // Добавляет заказ в базу данных.
+        /// <summary>
+        /// Adds order to database "Orders" table.
+        /// </summary>
+        /// <param name="order">User order data.</param>
+        /// <returns></returns>
         public async Task AddOrderToDBAsync(Order order)
         {
-            // Устанавливает для заказа статус - в процессе доставки.
-            order.OrderStatusId = 3;
+            // By default, order status is equal "In delivery process".
+            order.OrderStatusId = 1;
             order.OrderDateTime = DateTime.UtcNow;
             var cartGuid = _httpContext.HttpContext.Request.Cookies["CartId"];
             order.UserCartForeignKey = Guid.Parse(cartGuid);
@@ -63,28 +73,45 @@ namespace PizzaShopApplication.Models.Data.Domain
         /// <summary>
         /// Gets a order contains in database.
         /// </summary>
-        /// <param name="order"></param>
+        /// <param name="order">User order data.</param>
         /// <returns></returns>
         public async Task<Order> GetOrderFromDBAsync(Order order)
         {
             order = await _dbContext.Orders.FirstOrDefaultAsync(o => o.OrderDateTime == order.OrderDateTime && o.Phone == order.Phone);
             return order;
         }
-        // Получает заказ, сохраненный в базе данных по Id.
+        /// <summary>
+        /// Gets order, contains in database by his Id.
+        /// </summary>
+        /// <param name="orderId">Order Id</param>
         public async Task<Order> GetOrderFromDBAsync(int orderId)
         {
             return await _dbContext.Orders.Include(o => o.OrderStatus).FirstOrDefaultAsync(o => o.Id == orderId);
         }
-        // Находит в базе данных все продукты(пиццы) по id заказа.
+        /// <summary>
+        /// Gets all products from user cart Id.
+        /// </summary>
+        /// <param name="cartId">User cart Id.</param>
+        /// <returns></returns>
         public IEnumerable<Cart> GetConcreteCartFromOrder(string cartId)
         {
             var conreteCart = _cartRepository.GetConcreteCartAsync(cartId);
             return conreteCart;
         }
+        /// <summary>
+        /// Gets all order statuses from database "OrderStatuses" table.
+        /// </summary>
+        /// <returns></returns>
         public IEnumerable<OrderStatus> GetOrderStatuses()
         {
             return _dbContext.OrderStatuses;
         }
+        /// <summary>
+        ///  Changes order status.
+        /// </summary>
+        /// <param name="orderId">Order Id.</param>
+        /// <param name="orderStatusId">Order status Id.</param>
+        /// <returns></returns>
         public async Task ChangeOrderStatusAsync(int orderId, int orderStatusId)
         {
             var orderToChange = _dbContext.Orders.FirstOrDefaultAsync(o => o.Id == orderId).Result;
