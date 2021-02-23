@@ -11,42 +11,52 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using System.Security.Claims;
 using PizzaShopApplication.Models.Secondary;
+using PizzaShopApplication.Models.Data.Domain;
 
 namespace PizzaShopApplication.Controllers
 {
-    // commit
+    /// <summary>
+    /// This controller manages accounts.
+    /// </summary>
     public class AccountController : Controller
     {
-        private ApplicationDataContext dbContext;
-        private IPasswordHasher hasher;
-        public AccountController(ApplicationDataContext dbContext, IPasswordHasher hasher)
+        private readonly ApplicationDataContext _dbContext;
+        private readonly IPasswordHasher _hasher;
+        private readonly EditAccountRepository _editAccountRepository;
+        public AccountController(ApplicationDataContext dbContext, IPasswordHasher hasher,
+            EditAccountRepository editAccountRepository)
         {
-            this.dbContext = dbContext;
-            this.hasher = hasher;
+            _dbContext = dbContext;
+            _hasher = hasher;
+            _editAccountRepository = editAccountRepository;
         }
         [HttpGet]
         public IActionResult Login()
         {
             return View();
         }
+        /// <summary>
+        /// Allows the user to log into their account. 
+        /// </summary>
+        /// <param name="model">Login model for data validation.</param>
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(LoginModel model)
         {
             if (ModelState.IsValid)
             {
-                User user = await dbContext.Users
+                User user = await _dbContext.Users
                     .Include(u => u.Role)
                     .FirstOrDefaultAsync(u => u.Email == model.Email);
                 if (user != null)
                 {
-                    if (!hasher.IsPasswordMathcingHash(model.Password, user.Password))
+                    if (!_hasher.IsPasswordMathcingHash(model.Password, user.Password))
                     {
                         ModelState.AddModelError("", "Некорректные логин и(или) пароль");
                     }
                     else
                     {
-                        // Аутентификация.
+                        // Authentication.
                         await Authenticate(user);
                         return RedirectToAction("Index", "Home");
                     }
@@ -59,24 +69,29 @@ namespace PizzaShopApplication.Controllers
         {
             return View();
         }
+        /// <summary>
+        /// Allows the user to register new account. 
+        /// </summary>
+        /// <param name="model">Register model for data validation.</param>
+        /// <returns></returns>
         public async Task<IActionResult> Register(RegisterModel model)
         {
             if (ModelState.IsValid)
             {
-                User user = await dbContext.Users.FirstOrDefaultAsync(u => u.Email == model.Email);
+                User user = await _dbContext.Users.FirstOrDefaultAsync(u => u.Email == model.Email);
                 if (user == null)
                 {
-                    var hashPassword = hasher.GenerateHash(model.Password);
+                    var hashPassword = _hasher.GenerateHash(model.Password);
                     user = new User { Email = model.Email, Password = hashPassword };
-                    var userRole = await dbContext.Roles.FirstOrDefaultAsync(r => r.Name == "user");
+                    var userRole = await _dbContext.Roles.FirstOrDefaultAsync(r => r.Name == "user");
                     if (userRole != null)
                     {
                         user.Role = userRole;
                     }
-                    // Добавление пользователя в бд.
-                    await dbContext.Users.AddAsync(user);
-                    await dbContext.SaveChangesAsync();
-                    // Аутентификация.
+                    // Adding new user account to database "Users" table.
+                    await _dbContext.Users.AddAsync(user);
+                    await _dbContext.SaveChangesAsync();
+                    // Authentication.
                     await Authenticate(user);
                     return RedirectToAction("Index", "Home");
                 }
@@ -87,6 +102,10 @@ namespace PizzaShopApplication.Controllers
             }
             return View(model);
         }
+        /// <summary>
+        /// Allows the user to logout from account. 
+        /// </summary>
+        /// <returns></returns>
         public async Task<IActionResult> Logout()
         {
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
@@ -99,10 +118,10 @@ namespace PizzaShopApplication.Controllers
                 new Claim(ClaimsIdentity.DefaultNameClaimType, user.Email),
                 new Claim(ClaimsIdentity.DefaultRoleClaimType, user.Role?.Name)
             };  
-            // Cоздаем объект ClaimsIdentity.
+            // Create a new ClaimsIdentity object.
             var id = new ClaimsIdentity(claims, "ApplicationCookie", ClaimsIdentity.DefaultNameClaimType, 
                 ClaimsIdentity.DefaultRoleClaimType);
-            // Установка аутентификационных кук.
+            // Setting authenticate cookies.
             await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(id));
         }
     }
