@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using System.Security.Claims;
 using PizzaShopApplication.Models.Secondary;
 using PizzaShopApplication.Models.Data.Domain;
+using Microsoft.AspNetCore.Identity;
 
 namespace PizzaShopApplication.Controllers
 {
@@ -22,13 +23,11 @@ namespace PizzaShopApplication.Controllers
     {
         private readonly ApplicationDataContext _dbContext;
         private readonly IPasswordHasher _hasher;
-        private readonly EditAccountRepository _editAccountRepository;
-        public AccountController(ApplicationDataContext dbContext, IPasswordHasher hasher,
-            EditAccountRepository editAccountRepository)
+        private readonly UserManager<User> _userManager;
+        public AccountController(ApplicationDataContext dbContext, IPasswordHasher hasher)
         {
             _dbContext = dbContext;
             _hasher = hasher;
-            _editAccountRepository = editAccountRepository;
         }
         [HttpGet]
         public IActionResult Login()
@@ -47,12 +46,12 @@ namespace PizzaShopApplication.Controllers
             {
                 User user = await _dbContext.Users
                     .Include(u => u.Role)
-                    .FirstOrDefaultAsync(u => u.Email == model.Email);
+                    .FirstOrDefaultAsync(u => u.Email == model.EmailOrLogin || u.Login == model.EmailOrLogin);
                 if (user != null)
                 {
                     if (!_hasher.IsPasswordMathcingHash(model.Password, user.Password))
                     {
-                        ModelState.AddModelError("", "Некорректные логин и(или) пароль");
+                        ModelState.AddModelError("", "Неверный пароль!");
                     }
                     else
                     {
@@ -60,6 +59,10 @@ namespace PizzaShopApplication.Controllers
                         await Authenticate(user);
                         return RedirectToAction("Index", "Home");
                     }
+                }
+                else
+                {
+                    ModelState.AddModelError("", $"Аккаунта с таким логином или email не существует!");
                 }
             }
             return View(model);
@@ -78,27 +81,36 @@ namespace PizzaShopApplication.Controllers
         {
             if (ModelState.IsValid)
             {
-                User user = await _dbContext.Users.FirstOrDefaultAsync(u => u.Email == model.Email);
-                if (user == null)
+                // Checks if such a username or email already exists.
+                if (_dbContext.Users.Any(u => u.Email == model.Email))
                 {
-                    var hashPassword = _hasher.GenerateHash(model.Password);
-                    user = new User { Email = model.Email, Password = hashPassword };
-                    var userRole = await _dbContext.Roles.FirstOrDefaultAsync(r => r.Name == "user");
-                    if (userRole != null)
-                    {
-                        user.Role = userRole;
-                    }
-                    // Adding new user account to database "Users" table.
-                    await _dbContext.Users.AddAsync(user);
-                    await _dbContext.SaveChangesAsync();
-                    // Authentication.
-                    await Authenticate(user);
-                    return RedirectToAction("Index", "Home");
+                    ModelState.AddModelError("", $"Аккаунт с указанной почтой '{model.Email}' уже существует. Выберите другую.");
+                    return View(model);
                 }
-                else
+                if (_dbContext.Users.Any(u => u.Login == model.Login))
                 {
-                    ModelState.AddModelError("", "Некорректный логин и(или) пароль");
+                    ModelState.AddModelError("", $"Аккаунт с указанным логином '{model.Login}' уже существует. Выберите другой.");
+                    return View(model);
                 }
+                var hashPassword = _hasher.GenerateHash(model.Password);
+                var user = new User
+                {
+                    Email = model.Email,
+                    Password = hashPassword,
+                    Name = model.Name,
+                    Login = model.Login
+                };
+                var userRole = await _dbContext.Roles.FirstOrDefaultAsync(r => r.Name == "user");
+                if (userRole != null)
+                {
+                    user.Role = userRole;
+                }
+                // Adding new user account to database "Users" table.
+                await _dbContext.Users.AddAsync(user);
+                await _dbContext.SaveChangesAsync();
+                // Authentication.
+                await Authenticate(user);
+                return RedirectToAction("Index", "Home");
             }
             return View(model);
         }
@@ -110,6 +122,24 @@ namespace PizzaShopApplication.Controllers
         {
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             return RedirectToAction("Login", "Account");
+        }
+        [HttpGet]
+        public IActionResult AccountSettings()
+        {
+            //var currentUser = _userManager.GetUserAsync(User).Result;
+            var currentUserEmail = HttpContext.User.Identities.FirstOrDefault().Name;
+            var currentUser = _dbContext.Users.FirstOrDefaultAsync(u => u.Email == currentUserEmail).Result;
+            return View(currentUser);
+        }
+        [HttpPost]
+        public async Task<IActionResult> AccountSettings(User user)
+        {
+            var userToChange = await _dbContext.Users.FirstOrDefaultAsync(u => u.Id == user.Id);
+            userToChange.Email = user.Email;
+            userToChange.Name = user.Name;
+            userToChange.Password = _hasher.GenerateHash(user.Password);
+            await _dbContext.SaveChangesAsync();
+            return RedirectToAction("Index", "Home");
         }
         private async Task Authenticate(User user)
         {

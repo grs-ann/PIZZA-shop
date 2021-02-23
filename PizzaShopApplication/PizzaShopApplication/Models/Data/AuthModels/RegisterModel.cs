@@ -8,6 +8,10 @@ namespace PizzaShopApplication.Models.Data.AuthModels
 {
     public class RegisterModel
     {
+        [Required(ErrorMessage = "Не указал логин")]
+        public string Login { get; set; }
+        [Required(ErrorMessage = "Не указано Имя")]
+        public string Name { get; set; }
         [Required(ErrorMessage = "Не указан Email")]
         public string Email { get; set; }
         [Required(ErrorMessage = "Не указан пароль")]

@@ -43,7 +43,7 @@
                                 <a class="nav-link text-dark" asp-controller="Account" asp-action="Logout">Выйти из аккаунта</a>
                             </li>
                             <li>
-                                <a class="nav-link text-dark" asp-controller="" asp-action="">Настройки</a>
+                                <a class="nav-link text-dark" asp-controller="Account" asp-action="AccountSettings">Настройки</a>
                             </li>
                         }
                         @if (User.IsInRole("admin"))

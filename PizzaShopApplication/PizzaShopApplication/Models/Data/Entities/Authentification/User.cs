@@ -15,7 +15,13 @@ namespace PizzaShopApplication.Models.Data.Entities
         [Key]
         public int Id { get; set; }
         public string Email { get; set; }
+        // User login.
+        public string Login { get; set; }
         public string Password { get; set; }
+        // User name.
+        public string Name { get; set;}
+
+
         public int? RoleId { get; set; }
         public Role Role { get; set; }
     }

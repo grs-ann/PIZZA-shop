@@ -1,0 +1,29 @@
+﻿@using PizzaShopApplication.Models.Data.Entities;
+@{
+    ViewData["Title"] = "Изменение данных аккаунта";
+}
+@model User
+<h1>Редактирование аккаунта</h1>
+
+
+<form asp-action="AccountSettings" asp-controller="Account" asp-anti-forgery="true" enctype="multipart/form-data">
+    <div class="form-group">
+        <label asp-for="Name">Ваше имя</label>
+        <input type="text" asp-for="Name" />
+    </div>
+    <div class="form-group">
+        <label asp-for="Email">Ваша почта</label>
+        <input type="text" asp-for="Email" />
+    </div>
+    <div class="form-group">
+        <label asp-for="Password">Ваш пароль</label>
+        <input type="password" asp-for="Password" />
+    </div>
+    <div class="form-group">
+        <input type="hidden" asp-for="Id" />
+    </div>
+    <div>
+        <input formmethod="post" type="submit" value="Подтвердить изменения" class="btn btn-outline-dark" />
+    </div>
+</form>
+    
