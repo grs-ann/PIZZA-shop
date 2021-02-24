@@ -4,26 +4,23 @@
 }
 @model User
 <h1>Редактирование аккаунта</h1>
-
-
-<form asp-action="AccountSettings" asp-controller="Account" asp-anti-forgery="true" enctype="multipart/form-data">
-    <div class="form-group">
-        <label asp-for="Name">Ваше имя</label>
-        <input type="text" asp-for="Name" />
-    </div>
-    <div class="form-group">
+<div>
+    <form asp-action="ChangeName" asp-controller="Account" asp-anti-forgery="true" enctype="multipart/form-data">
+        <div>
+            <label asp-for="Name">Ваше имя</label>
+            <input type="hidden" asp-for="Id" />
+            <input type="text" asp-for="Name" />
+            <input formmethod="post" type="submit" value="Изменить имя" />
+        </div>
+    </form>
+    <form asp-action="ChangeEmail" asp-controller="Account" asp-anti-forgery="true" enctype="multipart/form-data">
         <label asp-for="Email">Ваша почта</label>
-        <input type="text" asp-for="Email" />
-    </div>
-    <div class="form-group">
-        <label asp-for="Password">Ваш пароль</label>
-        <input type="password" asp-for="Password" />
-    </div>
-    <div class="form-group">
         <input type="hidden" asp-for="Id" />
-    </div>
-    <div>
-        <input formmethod="post" type="submit" value="Подтвердить изменения" class="btn btn-outline-dark" />
-    </div>
-</form>
-    
+        <input type="text" asp-for="Email" />
+        <input formmethod="post" type="submit" value="Изменить имя" />
+    </form>
+    <form asp-action="ChangePassword" asp-controller="Account" asp-anti-forgery="true" enctype="multipart/form-data">
+        <input type="hidden" asp-for="Id" />
+        <input asp-action="ChangePassword" asp-controller="Account" formmethod="get" type="submit" value="Изменить пароль" class="btn btn-outline-dark" />
+    </form>
+</div>

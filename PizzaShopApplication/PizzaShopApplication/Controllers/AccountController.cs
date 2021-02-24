@@ -126,9 +126,9 @@ namespace PizzaShopApplication.Controllers
         [HttpGet]
         public IActionResult AccountSettings()
         {
-            //var currentUser = _userManager.GetUserAsync(User).Result;
-            var currentUserEmail = HttpContext.User.Identities.FirstOrDefault().Name;
-            var currentUser = _dbContext.Users.FirstOrDefaultAsync(u => u.Email == currentUserEmail).Result;
+            // User Id.
+            var userId = int.Parse(HttpContext.User.FindFirstValue(ClaimsIdentity.DefaultIssuer));
+            var currentUser = _dbContext.Users.FirstOrDefaultAsync(u => u.Id == userId).Result;
             return View(currentUser);
         }
         [HttpPost]
@@ -141,10 +141,52 @@ namespace PizzaShopApplication.Controllers
             await _dbContext.SaveChangesAsync();
             return RedirectToAction("Index", "Home");
         }
+        [HttpPost]
+        public async Task<IActionResult> ChangeName(User user)
+        {
+            var userToChange = await _dbContext.Users
+                .FirstOrDefaultAsync(u => u.Id == user.Id);
+            userToChange.Name = user.Name;
+            await _dbContext.SaveChangesAsync();
+            return RedirectToAction("AccountSettings", "Account");
+        }
+        [HttpPost]
+        public async Task<IActionResult> ChangeEmail(User user)
+        {
+            var userToChange = await _dbContext.Users
+                .FirstOrDefaultAsync(u => u.Id == user.Id);
+            userToChange.Email = user.Email;
+            await _dbContext.SaveChangesAsync();
+            return RedirectToAction("AccountSettings", "Account");
+        }
+        [HttpGet]
+        public IActionResult ChangePassword(User user)
+        {
+            return View(user);
+        }
+        [HttpPost]
+        public async Task<IActionResult> ChangePassword(string oldPassword, string newPassword, User user)
+        {
+            var userToChange = await _dbContext.Users.FirstOrDefaultAsync(u => u.Id == user.Id);
+            if (_hasher.IsPasswordMathcingHash(oldPassword, userToChange.Password))
+            {
+                if (newPassword != null)
+                {
+                    userToChange.Password = _hasher.GenerateHash(newPassword);
+                    await _dbContext.SaveChangesAsync();
+                    return RedirectToAction("AccountSettings", "Account");
+                }
+                ModelState.AddModelError("", "Новый пароль не может быть пуст");
+                return View(user);
+            }
+            ModelState.AddModelError("", "Неверно введен старый пароль");
+            return View(user);
+        }
         private async Task Authenticate(User user)
         {
             var claims = new List<Claim>
             {
+                new Claim(ClaimsIdentity.DefaultIssuer, user.Id.ToString()),
                 new Claim(ClaimsIdentity.DefaultNameClaimType, user.Email),
                 new Claim(ClaimsIdentity.DefaultRoleClaimType, user.Role?.Name)
             };  
