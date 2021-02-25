@@ -1,14 +1,13 @@
 ﻿using PizzaShopApplication.Models.Data.Context;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Hosting;
-using PizzaShopApplication.Models.Data.Entities.Data;
-using PizzaShopApplication.Models.Data.Domain.Interfaces;
+using PizzaShopApplication.Models.Domain.Interfaces;
 using System.Linq;
-using PizzaShopApplication.Models.Secondary.Entities;
+using PizzaShopApplication.Models.ProductModels;
+using PizzaShopApplication.Models.Data.Entities.Products;
 
-namespace PizzaShopApplication.Models.Data.Domain
+namespace PizzaShopApplication.Models.Domain
 {
     /// <summary>
     /// This class represents easy way to get products 

@@ -1,9 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using PizzaShopApplication.Models.Data.AuthModels;
 using PizzaShopApplication.Models.Data.Context;
-using PizzaShopApplication.Models.Data.Entities;
-using System;
+using PizzaShopApplication.Models.Data.Entities.Authentification;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -11,8 +9,8 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using System.Security.Claims;
 using PizzaShopApplication.Models.Secondary;
-using PizzaShopApplication.Models.Data.Domain;
 using Microsoft.AspNetCore.Identity;
+using PizzaShopApplication.Models.AuthModels;
 
 namespace PizzaShopApplication.Controllers
 {

@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace PizzaShopApplication.Models.Data.Entities.Data
+namespace PizzaShopApplication.Models.Data.Entities.Products
 {
     /// <summary>
     /// Represents database table,

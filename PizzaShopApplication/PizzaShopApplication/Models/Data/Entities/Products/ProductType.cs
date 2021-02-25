@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace PizzaShopApplication.Models.Data.Entities.Data
+namespace PizzaShopApplication.Models.Data.Entities.Products
 {
     /// <summary>
     /// Represents table, contained

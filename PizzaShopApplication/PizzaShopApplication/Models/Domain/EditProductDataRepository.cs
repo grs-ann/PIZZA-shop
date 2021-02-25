@@ -2,16 +2,15 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using PizzaShopApplication.Models.Data.Context;
-using PizzaShopApplication.Models.Data.Entities.Data;
+using PizzaShopApplication.Models.Data.Entities.Products;
 using PizzaShopApplication.Models.Secondary;
-using PizzaShopApplication.Models.Secondary.Entities;
-using System;
+using PizzaShopApplication.Models.ProductModels;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace PizzaShopApplication.Models.Data.Domain
+namespace PizzaShopApplication.Models.Domain
 {
     /// <summary>
     /// This class provides possibility to use CRUD opertaions

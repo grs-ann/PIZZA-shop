@@ -1,14 +1,13 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using PizzaShopApplication.Models.Data.Context;
-using PizzaShopApplication.Models.Data.Entities.Data;
-using PizzaShopApplication.Models.Secondary.Entities;
+using PizzaShopApplication.Models.Data.Entities.Order;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace PizzaShopApplication.Models.Data.Domain
+namespace PizzaShopApplication.Models.Domain
 {
     /// <summary>
     /// This class represents the ability to use 

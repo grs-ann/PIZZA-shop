@@ -1,10 +1,7 @@
-﻿using PizzaShopApplication.Models.Data.Entities.Data;
-using System;
+﻿using PizzaShopApplication.Models.Data.Entities.Products;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
-namespace PizzaShopApplication.Models.Secondary.Entities
+namespace PizzaShopApplication.Models.ProductModels
 {
     /// <summary>
     /// The purpose of this class is to pass data to the View.

@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Razor.TagHelpers;
-using PizzaShopApplication.Models.Pagination;
+using PizzaShopApplication.Models.PaginationModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;

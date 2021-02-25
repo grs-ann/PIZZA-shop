@@ -1,12 +1,8 @@
-﻿using PizzaShopApplication.Models.Data;
+﻿using PizzaShopApplication.Models.Data.Entities.Products;
 using System;
-using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Threading.Tasks;
 
-namespace PizzaShopApplication.Models.Data.Entities.Data
+namespace PizzaShopApplication.Models.Data.Entities.Order
 {
     /// <summary>
     /// Represents user cart entity.
@@ -20,6 +16,6 @@ namespace PizzaShopApplication.Models.Data.Entities.Data
         public int Quantity { get; set; }
         public DateTime DateCreated { get; set; }
         public int ProductId { get; set; }
-        public Product Product{ get; set; }
+        public Product Product { get; set; }
     }
 }

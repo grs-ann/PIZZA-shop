@@ -1,19 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-using PizzaShopApplication.Models;
-using PizzaShopApplication.Models.Data;
-using PizzaShopApplication.Models.Data.Context;
-using PizzaShopApplication.Models.Data.Domain;
-using PizzaShopApplication.Models.Data.Domain.Interfaces;
-using PizzaShopApplication.Models.Pagination;
-using PizzaShopApplication.Models.Secondary.Entities;
+﻿using Microsoft.AspNetCore.Mvc;
+using PizzaShopApplication.Models.Domain.Interfaces;
+using PizzaShopApplication.Models.ProductModels;
 
 namespace PizzaShopApplication.Controllers
 {

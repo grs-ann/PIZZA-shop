@@ -1,14 +1,12 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PizzaShopApplication.Models.Data.Context;
-using PizzaShopApplication.Models.Data.Domain;
-using PizzaShopApplication.Models.Data.Domain.Interfaces;
-using PizzaShopApplication.Models.Data.Entities.Data;
-using PizzaShopApplication.Models.Filtration;
-using PizzaShopApplication.Models.Pagination;
-using PizzaShopApplication.Models.Secondary.Entities;
+using PizzaShopApplication.Models.Data.Entities.Order;
+using PizzaShopApplication.Models.Domain;
+using PizzaShopApplication.Models.Domain.Interfaces;
+using PizzaShopApplication.Models.FiltrationModels;
+using PizzaShopApplication.Models.PaginationModels;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 

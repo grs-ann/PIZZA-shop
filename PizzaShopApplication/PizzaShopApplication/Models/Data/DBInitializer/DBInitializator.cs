@@ -1,11 +1,8 @@
 ﻿using PizzaShopApplication.Models.Data.Context;
-using PizzaShopApplication.Models.Data.Entities;
-using PizzaShopApplication.Models.Data.Entities.Authentification;
-using PizzaShopApplication.Models.Data.Entities.Data;
+using PizzaShopApplication.Models.Data.Entities.Products;
+using PizzaShopApplication.Models.Data.Entities.Order;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace PizzaShopApplication.Models.Data.DBInitializer
 {

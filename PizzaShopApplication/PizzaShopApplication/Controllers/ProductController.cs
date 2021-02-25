@@ -2,16 +2,11 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using PizzaShopApplication.Models.Data;
 using PizzaShopApplication.Models.Data.Context;
-using PizzaShopApplication.Models.Data.Domain;
-using PizzaShopApplication.Models.Data.Domain.Interfaces;
-using PizzaShopApplication.Models.Data.Entities.Data;
-using PizzaShopApplication.Models.Secondary.Entities;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
+using PizzaShopApplication.Models.Data.Entities.Products;
+using PizzaShopApplication.Models.Domain;
+using PizzaShopApplication.Models.Domain.Interfaces;
+using PizzaShopApplication.Models.ProductModels;
 using System.Threading.Tasks;
 
 namespace PizzaShopApplication.Controllers

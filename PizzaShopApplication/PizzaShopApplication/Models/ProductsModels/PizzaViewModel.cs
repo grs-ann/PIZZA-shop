@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace PizzaShopApplication.Models.Secondary.Entities
+namespace PizzaShopApplication.Models.ProductModels
 {
     /// <summary>
     /// The purpose of this class is to pass pizza data to the View.

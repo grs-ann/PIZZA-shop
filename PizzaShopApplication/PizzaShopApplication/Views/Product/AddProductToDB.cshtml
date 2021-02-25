@@ -1,5 +1,5 @@
-﻿@using PizzaShopApplication.Models.Data.Entities.Data;
-@model Product;
+﻿@using PizzaShopApplication.Models.Data.Entities.Products;
+@model Product
 <h3>Добавление продукта</h3>
 
 
@@ -17,10 +17,6 @@
             <label asp-for="Price">Цена</label>
             <input type="text" asp-for="Price" />
         </div>
-        @*<div class="form-group">
-            <label asp-for="">Диаметр пиццы</label>
-            <input type="number" asp-for="Diameter" />
-        </div>*@
         <div class="form-group">
             <label asp-for="Novelty">Новинка</label>
             <input type="checkbox" asp-for="Novelty" />

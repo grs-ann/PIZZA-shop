@@ -1,11 +1,9 @@
-﻿using PizzaShopApplication.Models.Data.Entities.Data;
-using PizzaShopApplication.Models.Filtration;
+﻿using PizzaShopApplication.Models.Data.Entities.Order;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
-namespace PizzaShopApplication.Models.Data.Domain.Interfaces
+namespace PizzaShopApplication.Models.Domain.Interfaces
 {
     /// <summary>
     /// This interface defines base methods, which

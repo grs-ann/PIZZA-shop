@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace PizzaShopApplication.Models.Data.AuthModels
+namespace PizzaShopApplication.Models.AuthModels
 {
     public class LoginModel
     {

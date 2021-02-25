@@ -1,22 +1,14 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using PizzaShopApplication.Models.Data.Context;
-using PizzaShopApplication.Models.Data.Domain;
-using PizzaShopApplication.Models.Data.Domain.Interfaces;
-using PizzaShopApplication.Models.Data.Entities;
+using PizzaShopApplication.Models.Domain;
+using PizzaShopApplication.Models.Domain.Interfaces;
 using PizzaShopApplication.Models.Secondary;
-using PizzaShopApplication.Models.Secondary.Entities;
 
 namespace PizzaShopApplication
 {

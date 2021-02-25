@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 
-namespace PizzaShopApplication.Models.Data.Entities.Data
+namespace PizzaShopApplication.Models.Data.Entities.Order
 {
     /// <summary>
     /// Represents database table, contained

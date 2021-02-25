@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace PizzaShopApplication.Models.Data.Entities
+namespace PizzaShopApplication.Models.Data.Entities.Authentification
 {
     /// <summary>
     /// Represents a user enitity in database "Users" table.
