@@ -8,6 +8,7 @@ using Microsoft.Extensions.Hosting;
 using PizzaShopApplication.Models.Data.Context;
 using PizzaShopApplication.Models.Domain;
 using PizzaShopApplication.Models.Domain.Interfaces;
+using PizzaShopApplication.Models.Domain.Interfaces.Reviews;
 using PizzaShopApplication.Models.Secondary;
 
 namespace PizzaShopApplication
@@ -31,6 +32,7 @@ namespace PizzaShopApplication
             services.AddTransient<ShoppingCartRepository>();
             services.AddTransient<IOrder, OrderRepository>();
             services.AddSingleton<IPasswordHasher, PasswordHasher>();
+            services.AddTransient<IShowReview, ReviewRepository>();
             string connection = Configuration.GetConnectionString("DefaultConnection");
             services.AddDbContext<ApplicationDataContext>(options => options.UseSqlServer(connection));
             // Установка конфигурации подключения.

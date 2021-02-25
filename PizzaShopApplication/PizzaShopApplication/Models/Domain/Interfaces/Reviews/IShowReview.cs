@@ -1,12 +1,11 @@
-﻿using System;
+﻿using PizzaShopApplication.Models.Data.Entities.Review;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace PizzaShopApplication.Models.Domain.Interfaces.Reviews
 {
     public interface IShowReview
     {
-        public Task<Review> GetAllReviews();
+        public IEnumerable<Review> GetAllReviews();
     }
 }

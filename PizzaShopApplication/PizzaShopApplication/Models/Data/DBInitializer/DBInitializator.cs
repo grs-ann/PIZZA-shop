@@ -3,6 +3,8 @@ using PizzaShopApplication.Models.Data.Entities.Products;
 using PizzaShopApplication.Models.Data.Entities.Order;
 using System;
 using System.Linq;
+using PizzaShopApplication.Models.Data.Entities.Review;
+using Microsoft.EntityFrameworkCore;
 
 namespace PizzaShopApplication.Models.Data.DBInitializer
 {
@@ -430,7 +432,24 @@ namespace PizzaShopApplication.Models.Data.DBInitializer
                         OrderStatus = context.OrderStatuses.FirstOrDefault(os => os.Id == 2)
                     });
             }
-
+            if (!context.Reviews.Any())
+            {
+                var user = context.Users.FirstOrDefault();
+                context.Reviews.AddRange(
+                    new Review
+                    {
+                        User = user,
+                        Comment = "Очень вкусная пицца! Заказывали в 17:30, в 17-55 уже привезли! Спасибо!",
+                        CommentDateTime = DateTime.UtcNow
+                    },
+                    new Review
+                    {
+                        User = user,
+                        Comment = "Хоть я и директор этой пиццерии, но всегда люблю полакомиться нереально вкуснйо пицце! И это про нас!!!",
+                        CommentDateTime = DateTime.UtcNow
+                    });
+                context.SaveChanges();
+            }
             context.SaveChanges();
         }
         /// <summary>

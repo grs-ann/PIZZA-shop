@@ -22,6 +22,9 @@
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
                         <li class="nav-item">
+                            <a class="nav-link text-dark" asp-controller="Review" asp-action="GetAllComments">ОТЗЫВЫ</a>
+                        </li>
+                        <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                         </li>
                         <li class="nav-item">
@@ -29,35 +32,30 @@
                         </li>
                         @if (!User.Identity.IsAuthenticated)
                         {
-                            <li>
-                                <a class="nav-link text-dark" asp-controller="Account" asp-action="Login">Войти в аккаунт</a>
-                            </li>
-                            <li>
-                                <a class="nav-link text-dark" asp-controller="Account" asp-action="Register">Регистрация</a>
-                            </li>
-
-                        }
-                        else
-                        {
-                            <li>
-                                <a class="nav-link text-dark" asp-controller="Account" asp-action="Logout">Выйти из аккаунта</a>
-                            </li>
-                            <li>
-                                <a class="nav-link text-dark" asp-controller="Account" asp-action="AccountSettings">Настройки</a>
-                            </li>
-                        }
+                    <li>
+                        <a class="nav-link text-dark" asp-controller="Account" asp-action="Login">Войти в аккаунт</a>
+                    </li>
+                                    <li>
+                                        <a class="nav-link text-dark" asp-controller="Account" asp-action="Register">Регистрация</a>
+                                    </li> }
+                                                else
+                                                {
+                                    <li>
+                                        <a class="nav-link text-dark" asp-controller="Account" asp-action="Logout">Выйти из аккаунта</a>
+                                    </li>
+                                                    <li>
+                                                        <a class="nav-link text-dark" asp-controller="Account" asp-action="AccountSettings">Настройки</a>
+                                                    </li>}
                         @if (User.IsInRole("admin"))
                         {
-                            <li>
-                                <a class="nav-link text-dark" asp-controller="Product" asp-action="GetProductsToChange">Редактировать товары</a>
-                            </li>
-                        }
+                    <li>
+                        <a class="nav-link text-dark" asp-controller="Product" asp-action="GetProductsToChange">Редактировать товары</a>
+                    </li>}
                         @if (User.IsInRole("admin") || User.IsInRole("dispatcher"))
                         {
-                            <li>
-                                <a class="nav-link text-dark" asp-controller="Order" asp-action="GetOrders">Пользовательские заказы</a>
-                            </li>
-                        }
+                    <li>
+                        <a class="nav-link text-dark" asp-controller="Order" asp-action="GetOrders">Пользовательские заказы</a>
+                    </li>}
                     </ul>
                 </div>
             </div>
