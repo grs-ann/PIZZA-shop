@@ -2,6 +2,7 @@
 using PizzaShopApplication.Models.Data.Entities.Authentification;
 using PizzaShopApplication.Models.Data.Entities.Order;
 using PizzaShopApplication.Models.Data.Entities.Products;
+using PizzaShopApplication.Models.Data.Entities.Review;
 using PizzaShopApplication.Models.Secondary;
 
 namespace PizzaShopApplication.Models.Data.Context
@@ -18,6 +19,7 @@ namespace PizzaShopApplication.Models.Data.Context
         public DbSet<Cart> Carts { get; set; }
         public DbSet<Image> Images { get; set; }
         public DbSet<OrderStatus> OrderStatuses { get; set; }
+        public DbSet<Review> Reviews { get; set; }
         public ApplicationDataContext(DbContextOptions<ApplicationDataContext> options) : base(options)
         {
             Database.EnsureCreated();
