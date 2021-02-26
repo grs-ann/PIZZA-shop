@@ -5,7 +5,13 @@ using System.Threading.Tasks;
 
 namespace PizzaShopApplication.Models.Domain.Interfaces.Reviews
 {
-    interface IEditReview
+    public interface IEditReview
     {
+        /// <summary>
+        /// Should add a new review to DB.
+        /// </summary>
+        /// <param name="comment">Review comment.</param>
+        /// <returns></returns>
+        public Task SetNewReviewAsync(string comment);
     }
 }

@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PizzaShopApplication.Models.Data.Context;
-using PizzaShopApplication.Models.Domain;
 using PizzaShopApplication.Models.Domain.Interfaces.Reviews;
+using System.Threading.Tasks;
 
 namespace PizzaShopApplication.Controllers
 {
@@ -16,11 +13,14 @@ namespace PizzaShopApplication.Controllers
     public class ReviewController : Controller
     {
         private readonly ApplicationDataContext _dbContext;
-        private readonly IShowReview _reviewRepository;
-        public ReviewController(ApplicationDataContext dbContext, IShowReview reviewRepository)
+        private readonly IShowReview _showReviewRepository;
+        private readonly IEditReview _editReviewRepository;
+        public ReviewController(ApplicationDataContext dbContext, IShowReview reviewRepository
+            , IEditReview editReviewRepository)
         {
             _dbContext = dbContext;
-            _reviewRepository = reviewRepository;
+            _showReviewRepository = reviewRepository;
+            _editReviewRepository = editReviewRepository;
         }
         /// <summary>
         /// Gets all comments from database "Reviews" table.
@@ -28,16 +28,29 @@ namespace PizzaShopApplication.Controllers
         /// <returns></returns>
         public IActionResult GetAllComments()
         {
-            var reviews = _reviewRepository.GetAllReviews();
+            var reviews = _showReviewRepository.GetAllReviews();
             return View(reviews);
         }
         /// <summary>
-        /// Comments a review by its Id.
+        /// Gets possibility to user to add review.
         /// </summary>
         /// <param name="reviewId">Review id</param>
-        public IActionResult CommentReview(int reviewId)
+        [Authorize]
+        [HttpGet]
+        public IActionResult CommentReview()
         {
-            return PartialView("_CommentReview");
+            return View();
+        }
+        /// <summary>
+        /// Adds review, sent by user.
+        /// </summary>
+        /// <param name="review">Review data, filled by user.</param>
+        [Authorize]
+        [HttpPost]
+        public async Task<IActionResult> CommentReview(string comment)
+        {
+            await _editReviewRepository.SetNewReviewAsync(comment);
+            return RedirectToAction("GetAllComments", "Review");
         }
     }
 }

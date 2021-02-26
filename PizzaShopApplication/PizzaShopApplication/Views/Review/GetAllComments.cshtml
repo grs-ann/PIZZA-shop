@@ -4,24 +4,19 @@
 }
 @model IEnumerable<Review> 
 <h1>ОТЗЫВЫ</h1>
+<form method="get" action="/Review/CommentReview">
+    <input type="submit" value="Добавить свой отзыв" class="btn btn-outline-primary" />
+</form>
 <table>
     <tr>
         <td>Имя</td>
         <td>Комментарий</td>
-        <td></td>
     </tr>
     @foreach (var item in Model)
     {
         <tr>
             <td>@item.User.Name<br />@item.CommentDateTime</td>
             <td>@item.Comment</td>
-            @if (User.Identity.IsAuthenticated)
-            {
-                <td>
-                    <button asp-action="CommentReview" asp-controller="Review" value="Комментировать"></button>
-                </td>
-            }
         </tr>
     }
 </table>
-@await Html.PartialAsync("_CommentReview") 

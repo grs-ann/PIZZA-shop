@@ -33,6 +33,7 @@ namespace PizzaShopApplication
             services.AddTransient<IOrder, OrderRepository>();
             services.AddSingleton<IPasswordHasher, PasswordHasher>();
             services.AddTransient<IShowReview, ReviewRepository>();
+            services.AddTransient<IEditReview, ReviewRepository>();
             string connection = Configuration.GetConnectionString("DefaultConnection");
             services.AddDbContext<ApplicationDataContext>(options => options.UseSqlServer(connection));
             // Установка конфигурации подключения.

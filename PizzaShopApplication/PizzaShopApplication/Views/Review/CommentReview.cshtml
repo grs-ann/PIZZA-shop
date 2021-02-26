@@ -1,0 +1,12 @@
+﻿@{ 
+    ViewBag.Title = "Добавление отзыва";
+}
+
+<form asp-action="CommentReview" asp-controller="Review">
+    <div class="validation" asp-validation-summary="All"></div>
+    <div>
+        <p><b>Введите ваш отзыв:</b></p>
+        <p><textarea name="comment"></textarea></p>
+        <input type="submit" formmethod="post" action="/Review/CommentReview" />
+    </div>
+</form>
