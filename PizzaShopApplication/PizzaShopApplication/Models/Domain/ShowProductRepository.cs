@@ -17,11 +17,9 @@ namespace PizzaShopApplication.Models.Domain
     {
 
         private readonly ApplicationDataContext _dbContext;
-        private readonly IWebHostEnvironment _appEnvironment;
-        public ShowProductRepository(ApplicationDataContext dbContext, IWebHostEnvironment appEnvironment)
+        public ShowProductRepository(ApplicationDataContext dbContext)
         {
             _dbContext = dbContext;
-            _appEnvironment = appEnvironment;
         }
         /// <summary>
         /// Getting a product contained in database by his Id.
@@ -83,6 +81,7 @@ namespace PizzaShopApplication.Models.Domain
         {
             //var products = _dbContext.Products.Include(p => p.Image).Include(p => p.ProductProperty);
             var products = _dbContext.Products.Include(p => p.Image);
+            //return products;
             return products;
         }
         /// <summary>
