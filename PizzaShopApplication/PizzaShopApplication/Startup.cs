@@ -36,7 +36,7 @@ namespace PizzaShopApplication
             services.AddTransient<IEditReview, ReviewRepository>();
             string connection = Configuration.GetConnectionString("DefaultConnection");
             services.AddDbContext<ApplicationDataContext>(options => options.UseSqlServer(connection));
-            // Установка конфигурации подключения.
+            // Set connecting configuration.
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                 .AddCookie(options =>
                 {
