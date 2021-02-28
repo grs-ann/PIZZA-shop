@@ -10,14 +10,13 @@ using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace PizzaShopApplicationTests
+namespace PizzaShopApplicationTests.ModelsLogicTests
 {
     [Collection("Database collection")]
     public class UnitTest_ShowProductRepository
     {
-        //ApplicationDataContext dbContext, IWebHostEnvironment appEnvironment
-        private TestsFixture _fixture;
-        private ShowProductRepository _showProductRepository { get; }
+        private readonly TestsFixture _fixture;
+        private readonly ShowProductRepository _showProductRepository;
         public UnitTest_ShowProductRepository(TestsFixture fixture)
         {
             _fixture = fixture;
@@ -35,6 +34,7 @@ namespace PizzaShopApplicationTests
             Assert.NotNull(allProducts);
             Assert.NotEmpty(allProducts);
             Assert.Equal("cheese.png", imageName);
+            _fixture.Dispose();
         }
         [Fact]
         public void Test_GetProductFromDB()
@@ -48,6 +48,7 @@ namespace PizzaShopApplicationTests
             Assert.Null(nullProductById);
             Assert.NotNull(notNullProductById);
             Assert.True(notNullProductById.Name.Equals("BonAqua"));
+            _fixture.Dispose();
         }
         [Fact]
         public void Test_GetAllPizzasFromDB()
@@ -60,6 +61,7 @@ namespace PizzaShopApplicationTests
             Assert.NotNull(allPizzas);
             Assert.NotEmpty(allPizzas);
             Assert.Null(allPizzas.FirstOrDefault(p => p.ProductType.Id == 2));
+            _fixture.Dispose();
         }
         [Fact]
         public void Test_GetAllDrinksFromDB()
@@ -73,6 +75,7 @@ namespace PizzaShopApplicationTests
             Assert.NotEmpty(allDrinks);
             Assert.NotNull(allDrinks.FirstOrDefault(p => p.ProductType.Id == 2));
             Assert.True(allDrinks.FirstOrDefault().ProductType.Name == "Напиток");
+            _fixture.Dispose();
         }
         [Fact]
         public void Test_GetDrinkViewModel()
@@ -86,10 +89,21 @@ namespace PizzaShopApplicationTests
             Assert.NotNull(correctDrinkViewModel);
             Assert.True(correctDrinkViewModel.Name == "BonAqua");
             Assert.Null(notCorrectDrinkViewModel);
+            _fixture.Dispose();
         }
         [Fact]
         public void Test_GetPizzaViewModel()
         {
+            // Arrange
+            AddDataToDB(_fixture.db);
+            // Act
+            var correctPizzaViewModel = _showProductRepository.GetPizzaViewModel(1);
+            var notCorrectPizzaViewModel = _showProductRepository.GetPizzaViewModel(3);
+            // Assert
+            Assert.NotNull(correctPizzaViewModel);
+            Assert.True(correctPizzaViewModel.Name == "4 сыра");
+            Assert.Null(notCorrectPizzaViewModel);
+            _fixture.Dispose();
         }
         private async void AddDataToDB(ApplicationDataContext dbContext)
         {
