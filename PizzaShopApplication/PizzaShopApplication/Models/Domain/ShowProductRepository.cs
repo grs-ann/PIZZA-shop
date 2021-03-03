@@ -20,6 +20,8 @@ namespace PizzaShopApplication.Models.Domain
         public ShowProductRepository(ApplicationDataContext dbContext)
         {
             _dbContext = dbContext;
+            // Temporary for tests!
+            _dbContext.Database.EnsureDeleted();
         }
         /// <summary>
         /// Getting a product contained in database by his Id.
@@ -52,7 +54,7 @@ namespace PizzaShopApplication.Models.Domain
                 Bestseller = product.Bestseller,
                 Discount = product.Discount,
                 Novelty = product.Novelty,
-                PizzaIngridients = product.ProductProperties.FirstOrDefault(p => p.Id == product.Id).Value
+                PizzaIngridients = product.ProductProperties.FirstOrDefault(p => p.Id == product.ProductProperties.FirstOrDefault().Id).Value
             };
             return pizzaViewModel;
         }
