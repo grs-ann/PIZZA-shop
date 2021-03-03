@@ -20,6 +20,8 @@ namespace PizzaShopApplication.Models.Domain
         public ShowProductRepository(ApplicationDataContext dbContext)
         {
             _dbContext = dbContext;
+            // Temporary for tests!
+            _dbContext.Database.EnsureDeleted();
         }
         /// <summary>
         /// Getting a product contained in database by his Id.
@@ -35,11 +37,15 @@ namespace PizzaShopApplication.Models.Domain
         /// Gets a product with pizza type, and fills
         /// the PizzaViewModel with this data.
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="id">Pizza Id in database "Products" table.</param>
         /// <returns>PizzaViewModel</returns>
         public PizzaViewModel GetPizzaViewModel(int id)
         {
             var product = _dbContext.Products.Include(p => p.ProductProperties).FirstOrDefaultAsync(p => p.Id == id).Result;
+            if (!product.ProductTypeId.Equals(1))
+            {
+                return null;
+            }
             var pizzaViewModel = new PizzaViewModel
             {
                 Id = product.Id,
@@ -48,7 +54,7 @@ namespace PizzaShopApplication.Models.Domain
                 Bestseller = product.Bestseller,
                 Discount = product.Discount,
                 Novelty = product.Novelty,
-                PizzaIngridients = product.ProductProperties.FirstOrDefault(p => p.Id == product.Id).Value
+                PizzaIngridients = product.ProductProperties.FirstOrDefault(p => p.Id == product.ProductProperties.FirstOrDefault().Id).Value
             };
             return pizzaViewModel;
         }
@@ -56,11 +62,15 @@ namespace PizzaShopApplication.Models.Domain
         /// Gets a product with drink type, and fills
         /// the DrinkViewModel with this data.
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="id">Drink Id in database "Products" table.</param>
         /// <returns>DrinkViewModel</returns>
         public DrinkViewModel GetDrinkViewModel(int id)
         {
             var product = _dbContext.Products.Include(p => p.ProductProperties).FirstOrDefaultAsync(p => p.Id == id).Result;
+            if (!product.ProductTypeId.Equals(2))
+            {
+                return null;
+            }
             var drinkViewModel = new DrinkViewModel
             {
                 Id = product.Id,
@@ -81,7 +91,6 @@ namespace PizzaShopApplication.Models.Domain
         {
             //var products = _dbContext.Products.Include(p => p.Image).Include(p => p.ProductProperty);
             var products = _dbContext.Products.Include(p => p.Image);
-            //return products;
             return products;
         }
         /// <summary>

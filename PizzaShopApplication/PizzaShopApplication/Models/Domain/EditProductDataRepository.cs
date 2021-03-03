@@ -25,6 +25,8 @@ namespace PizzaShopApplication.Models.Domain
         {
             _dbContext = dbContext;
             _appEnvironment = appEnvironment;
+            // Temporary for tests!
+            _dbContext.Database.EnsureDeleted();
         }
         /// <summary>
         /// Adds a new product with pizza type to database table.
@@ -96,7 +98,7 @@ namespace PizzaShopApplication.Models.Domain
             pizzaToChange.Name = pizzaModel.Name;
             pizzaToChange.Price = pizzaModel.Price;
             pizzaToChange.ProductProperties
-                .FirstOrDefault(p => p.Id == pizzaToChange.Id)
+                .FirstOrDefault(p => p.Property.Name == "Ингредиенты")
                 .Value = pizzaModel.PizzaIngridients;
             pizzaToChange.Novelty = pizzaModel.Novelty;
             pizzaToChange.Bestseller = pizzaModel.Bestseller;
@@ -154,8 +156,14 @@ namespace PizzaShopApplication.Models.Domain
         /// <param name="productToDelete">Product to be removed</param>
         public void CheckImageUsing(Product productToDelete)
         {
-            File.Delete(string.Concat(_appEnvironment.WebRootPath,
+            try
+            {
+                File.Delete(string.Concat(_appEnvironment.WebRootPath,
                     productToDelete.Image.Path, productToDelete.Image.Name));
+            }
+            catch (DirectoryNotFoundException ex)
+            {
+            }
             var imageToDelete = _dbContext.Images.
                 FirstOrDefaultAsync(i => i.Id == productToDelete.Image.Id).Result;
             _dbContext.Images.Remove(imageToDelete);
