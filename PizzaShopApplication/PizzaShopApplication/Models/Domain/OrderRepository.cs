@@ -25,6 +25,7 @@ namespace PizzaShopApplication.Models.Domain
             _dbContext = dbContext;
             _httpContext = httpContext;
             _cartRepository = cartRepository;
+            _dbContext.Database.EnsureDeleted();
         }
         /// <summary>
         /// Gets filtered order list.

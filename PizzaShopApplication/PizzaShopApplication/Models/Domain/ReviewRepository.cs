@@ -23,6 +23,7 @@ namespace PizzaShopApplication.Models.Domain
         {
             _dbContext = dbContext;
             _httpContextAccessor = httpContextAccessor;
+            _dbContext.Database.EnsureDeleted();
         }
         /// <summary>
         /// Gets all reviews, contains in DB.

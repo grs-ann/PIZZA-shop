@@ -22,6 +22,8 @@ namespace PizzaShopApplication.Models.Domain
         {
             _dbContext = dbContext;
             _httpContextAccessor = httpContextAccessor;
+            // Temporary for tests!
+            _dbContext.Database.EnsureDeleted();
         }
         /// <summary>
         /// Cookie key for search user cart
