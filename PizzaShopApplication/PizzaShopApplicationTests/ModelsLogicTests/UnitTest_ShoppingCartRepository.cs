@@ -19,7 +19,9 @@ namespace PizzaShopApplicationTests.ModelsLogicTests
     {
         private readonly TestsFixture _fixture;
         private readonly ShoppingCartRepository _shoppingCartRepository;
-        private const string CookieKiey = "CartId";
+        private const string CookieKey = "CartId";
+        // UserId from cookies.
+        private Guid cartGuid = Guid.NewGuid();
         public UnitTest_ShoppingCartRepository(TestsFixture fixture)
         {
             _fixture = fixture;
